@@ -4,4 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/_Arkanoid/Scenes/MainMenu.unity
+    guid: 413cde69d721c9948be5feeebfa56978
+  - enabled: 1
+    path: Assets/_Arkanoid/Scenes/Game.unity
+    guid: 71a243406afd70941aaea2a7b19981fc
