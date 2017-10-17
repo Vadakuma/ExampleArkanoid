@@ -14,14 +14,15 @@ namespace Arkanoid
         void Update(Platform platform);
         void MoveTo(Platform platform, int side);
         void AddDamage(int amount);
+
         void AddAbility(Platform platform, IAbility ability);
         void Disable();
         void GoToNextState();
     }
 
     /**
-     * 
-     * */
+        * 
+        * */
     public abstract class InitialState : IPlatformState
     {
         // link to current tick command
@@ -68,7 +69,8 @@ namespace Arkanoid
     }
 
     /*
-     * Active input, damage and ability
+     * MAIN GAME STATE 
+     * Active input, set and get damage, set ability
      */
     public class ActionState : InitialState
     {
@@ -149,45 +151,54 @@ namespace Arkanoid
     public class PlatformSettings
     {
         [SerializeField, Range(0, 10), Tooltip("Speed multiplier")]
-        protected float speed;
+        protected float     speed;
         [SerializeField, Tooltip("How fast we will get zero speed")]
-        protected float speedDampness;
+        protected float     speedDampness;
         [SerializeField, Range(0, 1), Tooltip("How fast we will get max speed after input command")]
-        protected float accel;
-        [SerializeField, Tooltip("Initial platform health")]
-        public int health;
-        [SerializeField, Tooltip("Maximum platform health")]
-        public int maxHealth;
+        protected float     accel;
+        [SerializeField, Tooltip("Initial platform player health")]
+        protected int       health;
+        [SerializeField, Tooltip("Maximum platform player health")]
+        protected int       maxHealth;
         [SerializeField, Tooltip(" ")]
-        public Vector2 movementShiftLimits = new Vector2(-10, 10);
-
+        protected Vector2   movementShiftLimits = new Vector2(-10, 10);
 
         // max platform speed
-        public float    Speed { get { return speed; } }
+        public float    Speed { get { return speed; } set { speed = value; } }
         // How fast we will get zero speed
         public float    SpeedDampness { get { return speedDampness; } }
         // How fast we will get max speed after input command
         public float    Acceleration { get { return accel; } }
         public Vector2  GetMovementShiftLimits { get { return movementShiftLimits; } }
-        public int      Health{ get { return health; } }
+        public int      Health{ get { return health; } set { health = value; } }
         public int      MaxHealth { get { return maxHealth; } }
     }
 
 
     /***************************************************************************************************
-     * PLATFORM MONO
+     * PLATFORM MONO -  player control actor
      * *************************************************************************************************/
     public class Platform : MonoBehaviour
     {
-        [SerializeField, Tooltip("Base settings about movement and health")] // see GameData.cs
+        [SerializeField, Tooltip("Base settings about movement,health, ...")] // see GameData.cs
         protected PlatformSettings platformSettings = new PlatformSettings();
 
         // platform state switcher
-        private IPlatformState state;
+        private /*static*/ IPlatformState state;
 
+        private static Platform _instance;
+
+        public static Platform Instance { get { return _instance; } private set { _instance = value; } }
+        public /*static*/ IPlatformState State { get { return state; } private set { state = value; } }
 
         //Base settings about movement and health
         public PlatformSettings     GetPlatformSettings { get { return platformSettings; } private set { } }
+
+
+        void Awake()
+        {
+            Instance = this;
+        }
 
         // Use this for initialization
         void Start()
@@ -227,11 +238,18 @@ namespace Arkanoid
         }
 
         /** apply Ability*/
-        public void AddAbility(IAbility ability)
+        public void AddAbility(Pickup pickup)
         {
-            state.AddAbility(this, ability);
+            state.AddAbility(this, pickup.AbilityContainer);
+
+            pickup.DeActivate();
         }
 
+
+        private void OnTriggerEnter(Collider other)
+        {
+            Debug.Log("OnTriggerEnter");
+        }
 
         private void OnDestroy()
         {
