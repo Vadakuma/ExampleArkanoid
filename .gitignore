@@ -1,0 +1,11 @@
+/*.csproj
+/*.sln
+/*.userprefs
+/obj
+/Library/*.log
+/Library/metadata
+/Assets/*.meta
+*.meta
+/Temp
+/Library
+/Out
