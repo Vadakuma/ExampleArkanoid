@@ -89,6 +89,8 @@ namespace Arkanoid
             }
 
             // Checking type of colliding object (may be it is enemy)
+            // TODO: checking only tag and use GetComponent if CompareTag is true
+            // during moving/copy paste to an another PC project folder some tag can be disappear! 
             Enemy e = collisionInfo.gameObject.GetComponent<Enemy>();
             if (collisionInfo.gameObject.CompareTag("Enemy") || e != null)
             {
