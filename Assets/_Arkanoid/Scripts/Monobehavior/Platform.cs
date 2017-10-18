@@ -30,7 +30,8 @@ namespace Arkanoid
         // 
         private     InputControl        inputcontrol;
         // base settings about movement and health
-        protected   PlatformSettings    platformSettings;   
+        protected   PlatformSettings    platformSettings;
+        protected   Platform            parent;
 
         public InitialState(Platform platform)
         {
@@ -39,6 +40,7 @@ namespace Arkanoid
 
         public virtual void Init(Platform platform)
         {
+            parent = platform;
             inputcontrol = new InputControl();
         }
 
@@ -58,7 +60,14 @@ namespace Arkanoid
 
         public void AddAbility(Platform platform, IAbility ability)
         {
-            ability.Apply(platform);
+            try
+            {
+                ability.Apply(platform);
+            }
+            catch
+            {
+
+            }
         }
 
         public void GoToNextState() { }
@@ -128,7 +137,12 @@ namespace Arkanoid
 
         public override void AddDamage( int amount)
         {
-
+            if (platformSettings.Health > 0)
+            {
+                platformSettings.Health -= amount;
+                if (platformSettings.Health < 1)
+                    parent.GoToDeadState();
+            }
         }
     }
 
@@ -204,8 +218,8 @@ namespace Arkanoid
         // Use this for initialization
         void Start()
         {
-            // starting
-            GoToActiveState();
+            // starting  
+            GoToIdleState();
         }
 
         // Update is called once per frame
@@ -214,8 +228,13 @@ namespace Arkanoid
             state.Update(this);
         }
 
-        /** Stop moving, get damage and ability*/
+        /** Stop moving, damage and ability*/
         public void GoToIdleState()
+        {
+            state = new IdleState(this);
+        }
+
+        public void GoToDeadState()
         {
             state = new IdleState(this);
         }
@@ -243,7 +262,7 @@ namespace Arkanoid
         {
             state.AddAbility(this, pickup.AbilityContainer);
 
-            pickup.DeActivate();
+            pickup.DeActivateState();
         }
 
 
@@ -253,8 +272,9 @@ namespace Arkanoid
         }
 
         private void OnDestroy()
-        {
-            state.Disable();
+        { 
+            if(state != null)
+                state.Disable();
         }
     }
 }

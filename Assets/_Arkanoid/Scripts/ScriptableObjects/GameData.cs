@@ -10,15 +10,28 @@ namespace Arkanoid
 {
     public class GameData : ScriptableObject
     {
-        public static GameData _instance;
+        private static GameData _instance;
+        public static GameData Instance { get { return _instance; } private set { _instance = value; } }
 
         [SerializeField]
-        protected LevelSettings     levelSettings = new LevelSettings();
+        protected List<LevelSettings>   levelSettings = new List<LevelSettings>();
         [SerializeField]
-        protected GameSettings      gameSettings = new GameSettings();
+        protected GameSettings          gameSettings = new GameSettings();
+        [SerializeField]
+        protected SessionCondition      loseCondition = new SessionCondition();
+        [SerializeField]
+        protected List<PlayerData>      sessionsResults = new List<PlayerData>();
 
         [SerializeField]
-        protected List<PlayerData>  sessionsResults = new List<PlayerData>();
+        public LevelSettings GetRandomLevelSettings {
+            get {
+                if (levelSettings.Count > 0)
+                    return levelSettings[Random.Range(0, levelSettings.Count)];
+                else
+                    return new LevelSettings(); // bad
+            }
+            private set { }
+        }
 
 
 #if UNITY_EDITOR
@@ -28,7 +41,7 @@ namespace Arkanoid
         {
             if (_instance == null)
             {
-                _instance = ScriptableObject.CreateInstance<GameData>();
+                Instance = ScriptableObject.CreateInstance<GameData>();
 
                 AssetDatabase.CreateAsset(_instance, "Assets/_Arkanoid/Resources/GameData.asset");
                 AssetDatabase.SaveAssets();
@@ -47,7 +60,12 @@ namespace Arkanoid
     [System.Serializable]
     public struct LevelSettings
     {
-        public int enemyAmount;
+        public int      enemyAmount;            // how much enemies will be generate on the level
+        public int      rows;                   // rows in the brick-enemy wall
+        public int      columns;                // columns in the brick-enemy wall
+        public Vector2  movementShiftLimits;    //
+        public Vector2  cell;                   // cell is the size place for the one brick-enemy
+        public bool     useAbilitySpawner;      // don't working at the moment
     }
 
     [System.Serializable]
@@ -56,9 +74,88 @@ namespace Arkanoid
         public int maxSavedSessions;
     }
 
-    [System.Serializable]
+    [System.Serializable] // memento
     public struct PlayerData
     {
         public int score;
+    }
+
+
+    /** */
+    public enum GameStatus
+    {
+        GS_INGAME = 0,
+        GS_LOSE = 1,
+        GS_WIN = 2,
+        GS_PAUSE = 3,
+        GS_TOMAINMENU = 4,
+        GS_LOADING = 6,
+    };
+
+
+
+
+    // condition for win or lose
+    [System.Serializable]
+    public class SessionCondition
+    {
+        [SerializeField]
+        protected bool loseIfPlatfromHealthIsZero;
+        [SerializeField]
+        protected bool loseIfProjectileIsDestroed;
+        [SerializeField]
+        protected bool loseIfTimeOut;
+
+
+        protected static bool isLoseIfPlatfromHealthIsZero;
+        protected static bool isLoseIfProjectileIsDestroed;
+        protected static bool isLoseIfTimeOut;
+
+        public SessionCondition()
+        {
+            isLoseIfPlatfromHealthIsZero = loseIfPlatfromHealthIsZero;
+            isLoseIfProjectileIsDestroed = loseIfProjectileIsDestroed;
+            isLoseIfTimeOut = loseIfTimeOut;
+        }
+
+        /** */
+        public static GameStatus CheckWinConditions(GameObject go, int amount, int health)
+        {
+            if (isLoseIfPlatfromHealthIsZero && health < 1)
+                return GameStatus.GS_LOSE;
+            if (isLoseIfProjectileIsDestroed && go == null)
+                return GameStatus.GS_LOSE;
+
+            if(amount > 0)
+                return GameStatus.GS_INGAME;
+            else
+                return GameStatus.GS_WIN;
+        }
+
+        /** */
+        public static GameStatus CheckWinConditions(GameObject go, int amount, int health, float timeout)
+        {
+            GameStatus result = CheckWinConditions(go, amount, health);
+            if (isLoseIfTimeOut && result == GameStatus.GS_INGAME)
+            {
+                if (timeout > 0)
+                    return GameStatus.GS_INGAME;
+                else
+                    return GameStatus.GS_LOSE;
+            }
+
+            return result;
+        }
+    }
+
+    // save game
+    class GameHistory
+    {
+        public Stack<PlayerData> History { get; private set; }
+
+        public GameHistory()
+        {
+            History = new Stack<PlayerData>();
+        }
     }
 }

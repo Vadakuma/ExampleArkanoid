@@ -7,6 +7,7 @@ namespace Arkanoid
 {
     public class InputControl
     {
+        //TODO: create dictionary with commands
         private Cmd toLeftCmd = new LeftWinCmd();
         private Cmd toRightCmd = new RightWinCmd();
 

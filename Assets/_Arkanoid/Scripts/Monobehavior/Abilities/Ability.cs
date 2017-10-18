@@ -9,10 +9,10 @@ namespace Arkanoid
     {
         void Apply(Platform p);
     }
+
     /***********************************
      * Ability settings
      * ********************************/
-
     [System.Serializable]
     public class AbilitySettings
     {
@@ -25,13 +25,9 @@ namespace Arkanoid
      * ********************************/
     public class Ability : MonoBehaviour, IAbility
     {
+        // short link to the platform settings
         protected  PlatformSettings ps;
 
         public virtual void Apply(Platform p) { }
     }
-
-
-
-
-
 }

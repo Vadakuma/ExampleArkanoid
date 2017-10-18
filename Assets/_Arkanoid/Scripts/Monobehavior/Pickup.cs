@@ -146,7 +146,7 @@ namespace Arkanoid
         /** Set ability to this pickup when spawning from Level.cs*/
         public void SetAbility(Ability ab)
         {
-            AbilityContainer = ab;
+            abilityContainer = ab;
         }
 
         // Update is called once per frame

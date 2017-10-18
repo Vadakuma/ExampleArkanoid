@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Arkanoid
 {
-    /** Projectile is easy bounce ball.
+    /** Unique projectile actor as easy bouncy ball.
      * */
     [RequireComponent(typeof(Rigidbody))]
     public class Projectile : MonoBehaviour
@@ -14,6 +14,8 @@ namespace Arkanoid
         protected int   damage;
         [SerializeField]
         protected float speed;
+        [SerializeField]
+        protected float destroyTime;
 
         public int      DamageAmount { get { return damage; } private set { } }
         public float    Speed { get { return speed; } private set { } }
@@ -27,15 +29,27 @@ namespace Arkanoid
 
         private readonly Vector3 initdir = new Vector3(1, 1, 1);
 
-        private WaitForSeconds stickingwait = new WaitForSeconds(0.15f);
+        private WaitForSeconds stickingwait = new WaitForSeconds(0.05f);
+
+        private static Projectile _instance;
+        public static Projectile Instance { get { return _instance; } private set { _instance = value; } }
+
+
+        void Awake()
+        {
+            Instance = this;
+            projectileRigidbody = GetComponent<Rigidbody>();
+        }
 
         // Use this for initialization
         void Start()
         {
-            projectileRigidbody = GetComponent<Rigidbody>();
+              // found spawn point and set position
+
 
             // initial inpulse
-            StartMoving();
+            //StartMoving();
+            StopMoving();
         }
 
 
@@ -46,6 +60,12 @@ namespace Arkanoid
 
         // Update is called once per frame
         void Update() {     }
+
+        /** */
+        public void SetInitialPosition()
+        {
+
+        }
 
         /** */
         public void StopMoving()
@@ -94,8 +114,33 @@ namespace Arkanoid
             Enemy e = collisionInfo.gameObject.GetComponent<Enemy>();
             if (collisionInfo.gameObject.CompareTag("Enemy") || e != null)
             {
+                //Debug.Log("AddDamage: " + e);
                 e.AddDamage(DamageAmount);
             }
+
+            // Touch the back wall is the end of game session!
+            if (collisionInfo.gameObject.CompareTag("BackWall"))
+            {
+                DestroyEffects();
+                DestroyState();
+            }
+        }
+
+        /** */
+        private void DestroyState()
+        {
+            Collider c = gameObject.GetComponent<Collider>();
+            if (c != null)
+                c.enabled = false;
+ 
+            // initiate destroy procedure
+            Destroy(gameObject, destroyTime);
+        }
+
+        /* Spawn some destroy effects **/
+        private void DestroyEffects()
+        {
+
         }
 
         /** Moving with platform direction for a while time

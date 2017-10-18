@@ -12,7 +12,20 @@ MonoBehaviour:
   m_Name: GameData
   m_EditorClassIdentifier: 
   levelSettings:
-    enemyAmount: 0
+  - enemyAmount: 10
+    rows: 2
+    columns: 5
+    movementShiftLimits: {x: 0, y: 0}
+    cell: {x: 1.5, y: 1.5}
+  - enemyAmount: 15
+    rows: 3
+    columns: 5
+    movementShiftLimits: {x: 0, y: 0}
+    cell: {x: 1.2, y: 1.2}
   gameSettings:
     maxSavedSessions: 0
-  sessionsresults: []
+  LoseCondition:
+    loseIfPlatfromHealthIsZero: 0
+    loseIfProjectileIsDestroed: 0
+    loseIfTimeOut: 0
+  sessionsResults: []

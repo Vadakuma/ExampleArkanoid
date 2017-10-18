@@ -1,22 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+
 
 namespace Arkanoid
 {
-    /** show info to user interface*/
-    public class HUD : MonoBehaviour
+    public class Enemy_SimpleBrick : Enemy
     {
-        [SerializeField]
-        protected Text hightscore;
-        [SerializeField]
-        protected Text roundindex;
 
         // Use this for initialization
         void Start()
         {
-            // load data
+            state = new EnemyActiveState(this);
         }
 
         // Update is called once per frame
