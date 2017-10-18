@@ -27,20 +27,20 @@ namespace Arkanoid
 			
 		}
 
-		/** */
+        /** 
 		public CanvasGroup SetCanvasGroup
 		{
 			set {
 				canvasGroup = value;
 			}
-		}
+		}*/
 
-		/** _cg - canvasGroup to control
+        /** _cg - canvasGroup to control
 		* _alpha - current value in alpha filed
 		* _smoothness - Lerp smoothnes on changing 
 		* _destroy - destroy CanvasGroupController at the end
 		*/
-		public void Restart(CanvasGroup _cg, float _alpha, float _smoothness, bool _destroy)
+        public void Restart(CanvasGroup _cg, float _alpha, float _smoothness, bool _destroy)
 		{
 			needcgAlpha = _alpha;
 			canvasGroup = _cg;

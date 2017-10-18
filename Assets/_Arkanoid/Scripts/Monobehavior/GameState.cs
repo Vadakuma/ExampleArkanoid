@@ -17,6 +17,10 @@ namespace Arkanoid
     /** */
     public abstract class InBaseGameState : IGameState
     {
+        protected string stateName = "InBaseGameState";
+
+        public string StateName { get { return stateName; } protected set { stateName = value; } }
+
         public InBaseGameState(IGameState prev)
         {
             if (prev != null)
@@ -25,15 +29,15 @@ namespace Arkanoid
             }
             
 
-            if (UIMenu.Instance)
-                UIMenu.Instance.SpawnPopup(this);
+            if (InGameUI.Instance)
+                InGameUI.Instance.SpawnPopup(StateName);
 
             SetDeActiveGameActors();
         }
         public virtual void Disable()
         {
-            if (UIMenu.Instance)
-                UIMenu.Instance.ClosePopup(this);
+            if (InGameUI.Instance)
+                InGameUI.Instance.ClosePopup(StateName);
         }
 
         public virtual void Update() { }
@@ -72,7 +76,9 @@ namespace Arkanoid
 
         public InPlayState(IGameState prev) : base(prev)
         {
-            if(Projectile.Instance)
+            StateName = "InPlayState";
+
+            if (Projectile.Instance)
                 Projectile.Instance.StartMoving();
             // activate checking win conditions
             if (GameState.Instance)
@@ -129,31 +135,31 @@ namespace Arkanoid
     /** */
     public class InPauseState : InBaseGameState
     {
-        public InPauseState(IGameState prev) : base(prev)  {   }
+        public InPauseState(IGameState prev) : base(prev)  { StateName = "InPauseState"; }
     }
 
     /** */
     public class InReturnToMenuState : InBaseGameState
     {
-        public InReturnToMenuState(IGameState prev) : base(prev) {  }
+        public InReturnToMenuState(IGameState prev) : base(prev) { StateName = "InReturnToMenuState"; }
     }
 
     /** */
     public class InWaitState : InBaseGameState
     {
-        public InWaitState(IGameState prev) : base(prev) {   }
+        public InWaitState(IGameState prev) : base(prev) { StateName = "InWaitState"; }
     }
 
     /** */
     public class InWinState : InBaseGameState
     {
-        public InWinState(IGameState prev) : base(prev)  {  }
+        public InWinState(IGameState prev) : base(prev)  { StateName = "InWinState"; }
     }
 
     /** */
     public class InLoseState : InBaseGameState
     {
-        public InLoseState(IGameState prev) : base(prev) { }
+        public InLoseState(IGameState prev) : base(prev) { StateName = "InLoseState"; }
     }
 
     /** */
@@ -163,6 +169,7 @@ namespace Arkanoid
 
         public InGenerateLevelState(IGameState prev) : base(prev)
         {
+            StateName = "InGenerateLevelState";
             // trying to generate level and waiting of reaction from user
             isDone = TryToGenerateLevel();
         }

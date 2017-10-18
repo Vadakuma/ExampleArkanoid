@@ -21,7 +21,7 @@ namespace Arkanoid
         private WaitForSeconds       spawnwait = new WaitForSeconds(pickupSpawnFrequency);
         private GameObject           lastspawnedpickup;
 
-
+        private bool isActive = false;
 
         void Awake()
         {
@@ -32,9 +32,14 @@ namespace Arkanoid
             if (useAbilitySpawner)
             {
                 if (pickups.Count > 0)
+                {
+                    isActive = true;
                     StartCoroutine(GeneratePickUps());
+                }
                 else
+                {
                     Debug.Log("There are no any pickups.");
+                }
             }
         }
 
@@ -52,7 +57,7 @@ namespace Arkanoid
         private IEnumerator GeneratePickUps()
         {
             int rand;
-            while (true)
+            while (isActive)
             {
                 yield return spawnwait;
                 rand = Random.Range(0, pickups.Count);
@@ -64,14 +69,14 @@ namespace Arkanoid
         /** */
         public void UnPauseSpawn()
         {
-           // Debug.Log("UnPauseSpawn");
+            isActive = true;
+            StartCoroutine(GeneratePickUps());
         }
 
         /** */
         public void PauseSpawn()
         {
-            //Debug.Log("PauseSpawn");
-
+            isActive = false;
         }
 
         /** */
