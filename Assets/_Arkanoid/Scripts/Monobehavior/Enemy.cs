@@ -73,18 +73,19 @@ namespace Arkanoid
             state.Update(this);
         }
 
-        private void AddDamage(int amount)
+        public void AddDamage(int amount)
         {
+            Debug.Log("Damage: " + amount + "||" + gameObject.name);
             state.AddDamage(amount);
         }
 
-        private void OnTriggerEnter(Collider other)
+        /*private void OnTriggerEnter(Collider other)
         {
             Debug.Log("OnTriggerEnter");
             Projectile pr = other.gameObject.GetComponent<Projectile>();
             if (pr != null)
                 AddDamage(pr.DamageAmount);
-        }
+        }*/
 
 
 

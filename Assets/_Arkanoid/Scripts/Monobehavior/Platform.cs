@@ -178,6 +178,7 @@ namespace Arkanoid
     /***************************************************************************************************
      * PLATFORM MONO -  player control actor
      * *************************************************************************************************/
+    [RequireComponent(typeof(Rigidbody))] // for gameplay staff need rigidbody
     public class Platform : MonoBehaviour
     {
         [SerializeField, Tooltip("Base settings about movement,health, ...")] // see GameData.cs
