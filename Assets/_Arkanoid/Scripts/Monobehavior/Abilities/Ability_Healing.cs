@@ -23,8 +23,6 @@ namespace Arkanoid
             ps = p.GetPlatformSettings;
             int mHealth = ps.MaxHealth;
             ps.Health = abilitySettings.health;
-
-            //Debug.Log("Ability_Healing Apply");
         }
     }
 }

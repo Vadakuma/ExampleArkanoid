@@ -43,6 +43,7 @@ namespace Arkanoid
             menus.Add(key, uicc);
         }
 
+        /** Activate menu by key */
         public void SpawnPopup(string key)
         {
             //Debug.Log("SpawnPopup: " + key);
@@ -52,7 +53,7 @@ namespace Arkanoid
                 menu.Fade(1.0f, 0.1f, false);
             }
         }
-
+        /** Deactivate menu by key */
         public void ClosePopup(string key)
         {
             //Debug.Log("ClosePopup: " + key);
@@ -88,12 +89,6 @@ namespace Arkanoid
         {
             if (InGameUI.Instance)
                 InGameUI.Instance.SpawnPopup(key);
-        }
-
-
-        void OnDisable()
-        {
-
         }
     }
 }

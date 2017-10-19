@@ -8,6 +8,11 @@ using UnityEditor;
 
 namespace Arkanoid
 {
+    /** General Game Settings
+     *  Level settings
+     *  Player Data containers
+     *  Lose conditions
+     * */
     public class GameData : ScriptableObject
     {
         private static GameData _instance;
@@ -19,10 +24,8 @@ namespace Arkanoid
         protected GameSettings          gameSettings    = new GameSettings();
         [SerializeField]
         protected SessionCondition      loseCondition   = new SessionCondition();
-        
-
-        // Container with results
-        public List<PlayerData> SessionsResults = new List<PlayerData>();
+        // Container with results just info container
+        public List<PlayerData>         SessionsResults = new List<PlayerData>();
 
         /** Condition about win or lose stuff*/
         public SessionCondition GetLoseCondition
@@ -50,9 +53,13 @@ namespace Arkanoid
             sessionPlayerData.Score += score;
         }
 
-        public static void ResetScore(int score)
+        public static void ResetScore()
         {
             sessionPlayerData.Score = 0;
+        }
+        public static void ResetRoundCounter()
+        {
+            sessionPlayerData.MaxRoundCounter = 0;
         }
 
 
@@ -89,29 +96,33 @@ namespace Arkanoid
     }
 
 
-
+    // level scene generate settings
     [System.Serializable]
     public struct LevelSettings
     {
         public int      enemyAmount;            // how much enemies will be generate on the level
         public int      rows;                   // rows in the brick-enemy wall
         public int      columns;                // columns in the brick-enemy wall
-        public Vector2  movementShiftLimits;    //
+        //public Vector2  movementShiftLimits;    //
         public Vector2  cell;                   // cell is the size place for the one brick-enemy
-        public bool     useAbilitySpawner;      // don't working at the moment
+        //public bool     useAbilitySpawner;      // don't working at the moment
     }
 
+    // don't working at the moment
     [System.Serializable]
     public struct GameSettings
     {
         public int maxSavedSessions;
     }
 
+    // session result plaer data
     [System.Serializable] 
     public class PlayerData
     {
-        private int score;
-        private int maxRoundCounter;
+        [SerializeField]
+        protected int score;
+        [SerializeField]
+        protected int maxRoundCounter;
 
         public int Score { get { return score; } set { score = value; } }
         public int MaxRoundCounter { get { return maxRoundCounter; } set { maxRoundCounter = value; } }

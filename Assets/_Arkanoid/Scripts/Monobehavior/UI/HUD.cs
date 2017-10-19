@@ -35,11 +35,9 @@ namespace Arkanoid
         }
 
         // Update is called once per frame
-        void Update()
-        {
+        void Update(){ }
 
-        }
-
+        /** */
         private IEnumerator UpdateHUD()
         {
             while (isActive)
@@ -51,7 +49,7 @@ namespace Arkanoid
                 if (hightscore)
                     hightscore.text = pd.Score.ToString();
                 if (roundindex)
-                    roundindex.text = pd.MaxRoundCounter.ToString();
+                    roundindex.text = (pd.MaxRoundCounter+1).ToString();
             }
         }
 

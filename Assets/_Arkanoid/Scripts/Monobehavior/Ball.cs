@@ -78,19 +78,24 @@ namespace Arkanoid
         public void StopMoving()
         {
             if (projectileRigidbody != null)
-            {
-                lastDirection = projectileRigidbody.velocity;
-                projectileRigidbody.velocity = Vector3.zero;
+            { 
+                if (projectileRigidbody.velocity != Vector3.zero){
+                    lastDirection = projectileRigidbody.velocity;
+                    projectileRigidbody.velocity = Vector3.zero;
+                }
             }
         }
 
         /** */
         public void StartMoving()
         {
-            if(lastDirection != Vector3.zero)
-                projectileRigidbody.velocity = lastDirection;
-            else
-                projectileRigidbody.velocity = Vector3.Reflect(initdir, Vector3.zero).normalized * speed;
+            if (projectileRigidbody.velocity == Vector3.zero)
+            {
+                if (lastDirection == Vector3.zero)
+                    lastDirection = initdir;
+
+                projectileRigidbody.velocity = lastDirection.normalized * speed;
+            }
         }
 
         /** Colliding for scene object - wall or player platform*/

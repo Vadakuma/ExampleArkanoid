@@ -39,9 +39,9 @@ namespace Arkanoid
         /** */
         private void SetInitialPosition()
         {
-            // set spawn position
+            // set spawn position on the line with platform
             Vector3 pos = Platform.Instance.gameObject.transform.position;
-            pos.x = Random.Range(pus.GetMovementShiftLimits.x, pus.GetMovementShiftLimits.y);
+            pos.x = Random.Range(pus.GetSpawnPosShiftLimits.x, pus.GetSpawnPosShiftLimits.y);
             parent.transform.position = pos + pus.PositionShift;
         }
 
@@ -55,7 +55,7 @@ namespace Arkanoid
         /** */
         public override void Update()
         {
-            // to do some staff
+            // to do some stuff
             if(isPickUpLife) // life time cicle
             {
                 lifeTime -= Time.deltaTime;
@@ -78,7 +78,7 @@ namespace Arkanoid
         public PickUpDeactiveState(Pickup pu)
         {
             GetSettings(pu);
-            // set up deactivate staff
+            // set up deactivate stuff
             CollisionOff(parent.GetComponent<Collider>());
             HideEffectsOn();
 
@@ -88,7 +88,7 @@ namespace Arkanoid
 
         /** */
         public override void Update() {
-            // to do some staff
+            // to do some stuff
         }
 
         private void CollisionOff(Collider pucollider) {
@@ -109,15 +109,15 @@ namespace Arkanoid
         protected float lifeTime = 5;
         [SerializeField, Tooltip("Death delay")]
         protected float deathTime = 1;
-        [SerializeField, Tooltip(" ")]
-        protected Vector2 movementShiftLimits = new Vector2(-10, 10);
+        [SerializeField, Tooltip("Max shift in the spawn line")]
+        protected Vector2 spawnPosShiftLimits = new Vector2(-5, 5);
         [SerializeField, Tooltip("Spawn position shift")]
-        protected Vector2 spawnPositionShift = new Vector3(0,0,0);
+        protected Vector3 spawnPositionShift = new Vector3(0,0,0);
 
         // max platform speed
         public float LifeTime { get { return lifeTime; } set { lifeTime = value; } }
         public float DeathTime { get { return deathTime; } set { deathTime = value; } }
-        public Vector2 GetMovementShiftLimits { get { return movementShiftLimits; } }
+        public Vector2 GetSpawnPosShiftLimits { get { return spawnPosShiftLimits; } }
         public Vector3 PositionShift { get { return spawnPositionShift; } }
     }
 
@@ -143,7 +143,7 @@ namespace Arkanoid
             state = new PickUpActiveState(this);
         }
 
-        /** Set ability to this pickup when spawning from Level.cs*/
+        /** Set ability to this pickup when spawning from PickUpManager.cs*/
         public void SetAbility(Ability ab)
         {
             abilityContainer = ab;

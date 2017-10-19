@@ -20,8 +20,9 @@ namespace Arkanoid
                     eventManager = GameObject.FindObjectOfType(typeof(EventManager)) as EventManager;
                     if (eventManager == null)
                     {
-                       // if(Application.isPlaying)
-                       //     Debug.LogError("There needs to be one active EventManger script on a GameObject in your scene.");
+                        // TODO: refactoring
+                        // it's ok. swears between levels loading
+                        // Debug.LogError("There needs to be one active EventManger script on a GameObject in your scene.");
                     }
                     else
                     {

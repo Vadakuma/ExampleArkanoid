@@ -113,8 +113,6 @@ namespace Arkanoid
             while (active)
             {
                 yield return waitbrforecheck;
-                //
-                //Debug.Log(CheckWinConditions());
                 switch (CheckWinConditions()) 
                 {
                     case GameStatus.GS_LOSE:
@@ -131,7 +129,7 @@ namespace Arkanoid
             }
         }
 
-        /** */
+        /** Prepare all data for checking and make a check */
         public GameStatus CheckWinConditions()
         {
             // update value
@@ -221,8 +219,14 @@ namespace Arkanoid
     /** */
     public class InLoseState : InBaseGameState
     {
-        public InLoseState(IGameState prev) : base(prev) {  }
+        public InLoseState(IGameState prev) : base(prev) { ResetResult(); }
         protected override void SetStateName() { StateName = "InLoseState"; }
+
+        // drop score about last try
+        private void ResetResult()
+        {
+            GameData.ResetScore();
+        }
     }
 
     /** */
@@ -234,6 +238,10 @@ namespace Arkanoid
         {
             // trying to generate level and waiting of reaction from user
             status = TryToGenerateLevel();
+            // dropping previous score result
+            ResetResult();
+            // make shure that platform in the good conditions
+            Platform.Instance.GoToResetState();
         }
         protected override void SetStateName() { StateName = "InGenerateLevelState"; }
 
@@ -276,6 +284,12 @@ namespace Arkanoid
 
             return success;
         }
+
+        // drop score about last try
+        private void ResetResult()
+        {
+            GameData.ResetScore();
+        }
     }
 
 
@@ -291,10 +305,8 @@ namespace Arkanoid
         private static GameState _instance;
         public  static GameState Instance { get { return _instance; } private set { _instance = value; } }
         // main game state switcher
-        private /*static*/ IGameState state;
-        public /*static*/ IGameState  State { get { return state; } private set { state = value;
-               // Debug.Log("Set: " + value);
-            } }
+        private static IGameState  state;
+        public static  IGameState  State { get { return state; } private set { state = value;   } }
 
 
         void Awake()
@@ -312,12 +324,15 @@ namespace Arkanoid
             SceneManager.sceneLoaded += OnLevelFinishedLoading;
         }
 
-
         /** */
         void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
         {
-            if (scene.buildIndex != 0) // check that it is right Game level by index
+            if (scene.buildIndex != 0) // check that it is right Game level by index and generate scene stuff
                 GoToGenerateLevelState();
+
+            // reset data from previous session
+            GameData.ResetScore();
+            GameData.ResetRoundCounter();
         }
 
         // Use this for initialization
@@ -328,14 +343,13 @@ namespace Arkanoid
         // Update is called once per frame
         void Update()  {
             state.Update();
-           // Debug.Log("|||" + state.ToString());
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            /*if (Input.GetKeyDown(KeyCode.Space))
                 GoToWaitState();
             if (Input.GetKeyDown(KeyCode.P))
                 GoToPlayState();
             if (Input.GetKeyDown(KeyCode.S))
-                GoToPauseState();
+                GoToPauseState();*/
         }
 
 

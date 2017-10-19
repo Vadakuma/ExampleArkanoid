@@ -10,9 +10,5 @@ namespace Arkanoid
     public class Enemy_ArmorBrick : Enemy
     {
 
-        /*void Start()
-        {
-            state = new EnemyActiveState(this);
-        }*/
     }
 }

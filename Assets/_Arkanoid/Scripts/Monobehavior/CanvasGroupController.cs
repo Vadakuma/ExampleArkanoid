@@ -19,21 +19,13 @@ namespace Arkanoid
 		private AlphaUpdate		    AlphaUpdater =() => { };
         private event AlphaUpdate   OnUpdateDoneEvent = () => { };
 
-        private AlphaUpdate RestartDoneMethod;
+        private AlphaUpdate RestartDoneMethod = () => { };
 
 
         // Use this for initialization
         void Start () {
 			
 		}
-
-        /** 
-		public CanvasGroup SetCanvasGroup
-		{
-			set {
-				canvasGroup = value;
-			}
-		}*/
 
         /** _cg - canvasGroup to control
 		* _alpha - current value in alpha field
@@ -57,7 +49,6 @@ namespace Arkanoid
 				AlphaUpdater  = new AlphaUpdate(AlphaTo_0);
 			}
 		}
-
 
         /** _cg - canvasGroup to control
 		* _alpha - current value in alpha filed
@@ -130,6 +121,7 @@ namespace Arkanoid
 
             // stop listening
             OnUpdateDoneEvent -= RestartDoneMethod;
+            RestartDoneMethod = () => { };
         }
 	}
 }

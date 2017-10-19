@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 namespace Arkanoid
 {
     /***************************************************************************************************
@@ -16,7 +17,7 @@ namespace Arkanoid
     [System.Serializable]
     public abstract class EnemyBaseState : IEnemyState
     {
-        protected Enemy parent;
+        protected Enemy             parent;
         protected BaseEnemySettings bes;
 
         public EnemyBaseState(Enemy e)
@@ -27,6 +28,7 @@ namespace Arkanoid
         public virtual void Update() { }
         public virtual void AddDamage(Enemy e, int amount) { }
 
+        /** set and save general links and settings*/
         protected void SetSettings(Enemy e)
         {
             parent = e;
@@ -44,7 +46,6 @@ namespace Arkanoid
     {
         public EnemyActiveState(Enemy e) :base(e)
         {
-            SetSettings(e);
             ActivateEffects();
         }
         public override void Update() { }
@@ -63,7 +64,6 @@ namespace Arkanoid
                     // we are dead!
                     e.ToDeadStateActivate();
                     // Player should get some points!
-                   
                     GameData.ApplyScore(bes.Score);
                 }
             }
@@ -78,13 +78,12 @@ namespace Arkanoid
         protected void ActivateEffects() {   }
     }
 
-    /** Death staff state*/
+    /** Death stuff state*/
     [System.Serializable]
     public class EnemyDeadState : EnemyBaseState
     {
         public EnemyDeadState(Enemy e) : base(e)
         {
-            SetSettings(e);
             DeadEffects();
             ReturnToThePool();
         }
@@ -104,14 +103,11 @@ namespace Arkanoid
     }
 
 
-    /** Death staff state*/
+    /** Idle stuff state*/
     [System.Serializable]
     public class EnemyIdleState : EnemyBaseState
     {
-        public EnemyIdleState(Enemy e) : base(e)
-        {
-            SetSettings(e);
-        }
+        public EnemyIdleState(Enemy e) : base(e) {    }
         public override void Update() { }
         public override void AddDamage(Enemy e, int amount) { }
     }
@@ -163,15 +159,17 @@ namespace Arkanoid
     {
         [SerializeField]
         protected BaseEnemySettings enemySettings = new BaseEnemySettings();
+        //Base settings about movement and health
+        public BaseEnemySettings    GetEnemySettings { get { return enemySettings; } private set { } }
 
         protected   IEnemyState state;
-        protected   EnemyPool   parentpool;
+        public      IEnemyState State { get { return state; } set { state = value; } }
 
-        public IEnemyState State { get { return state; } set { state = value; } }
 
-        public EnemyPool ParentPool { get { return parentpool; } set { parentpool = value; } }
-        //Base settings about movement and health
-        public BaseEnemySettings GetEnemySettings { get { return enemySettings; } private set { } }
+        protected   EnemyPool parentpool;
+        public      EnemyPool ParentPool { get { return parentpool; } set { parentpool = value; } }
+        
+       
 
         // Use this for initialization
         void Start()
@@ -185,9 +183,9 @@ namespace Arkanoid
             state.Update();
         }
 
+        /** apply damage to this enemy */
         public void AddDamage(int amount)
         {
-            //Debug.Log("Damage: " + amount + "||" + gameObject.name + "||" + state);
             state.AddDamage(this, amount);
         }
 
@@ -204,10 +202,9 @@ namespace Arkanoid
         public void Activate(EnemyPool ep)
         {
             gameObject.SetActive(true);
-           // ResetSettings();
         }
 
-        /** */
+        /** virtual because the most demanding state for the chnges action*/
         public virtual void ToActiveStateActivate()
         {
             state = new EnemyActiveState(this);
@@ -216,7 +213,6 @@ namespace Arkanoid
         /** */
         public void ToDeadStateActivate()
         {
-            //Debug.Log("ToDeadStateActivate: " + gameObject.name);
             state = new EnemyDeadState(this);
         }
 

@@ -10,7 +10,7 @@ namespace Arkanoid
     public class Level : MonoBehaviour
     {
         [SerializeField]
-        protected GameObject            projectile;
+        protected GameObject            ball;
         [SerializeField]
         protected List<Ability>         abilities = new List<Ability>();
 
@@ -39,8 +39,8 @@ namespace Arkanoid
             levelGenerator = new SimpleGenerator();
             levelSettings = levelGenerator.Generate();
 
-            // spawn projectile
-            SpawnProjectile();
+            // spawn Ball
+            SpawnBall();
         }
 
         /** setup btick by lase level settings*/
@@ -52,13 +52,13 @@ namespace Arkanoid
 
             levelGenerator.ResetLevel(levelSettings);
 
-            // reset settings in projectile or spawn a new one
-            SpawnProjectile();
+            // reset settings in Ball or spawn a new one
+            SpawnBall();
             
         }
 
         /** */
-        private void SpawnProjectile()
+        private void SpawnBall()
         {
             if(Ball.Instance != null)
             {
@@ -68,10 +68,9 @@ namespace Arkanoid
             else
             {
                 // check and spawn
-                if (projectile && projectile.GetComponent<Ball>() != null)
+                if (ball && ball.GetComponent<Ball>() != null)
                 {
-                    Instantiate(projectile);
-                    //Projectile.Instance.SetInitialPosition();
+                    Instantiate(ball);
                 }
             }
         }

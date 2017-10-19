@@ -37,7 +37,7 @@ namespace Arkanoid
         // Update is called once per frame
         void Update() {     }
 
-
+        /** set listeners for menu buttons event*/
         public static void AddListeners()
         {
             // set all listeners at once, it should work from any UIMenu 
@@ -53,7 +53,8 @@ namespace Arkanoid
             }
         }
 
-        public static void RemoveLesteners()
+        /** remove all listeners */
+        public static void RemoveListeners()
         {
             // remove all listeners at once
             if (isSetListeners)
@@ -69,7 +70,7 @@ namespace Arkanoid
             }
         }
 
-        /** call from buttons */
+        /** Button event. Call right method by TriggerEvent key  */
         public void OnClosePopup(string key)
         {
             EventManager.TriggerEvent(key);
@@ -79,7 +80,7 @@ namespace Arkanoid
 
         void OnDisable()
         {
-            RemoveLesteners();
+            RemoveListeners();
         }
     }
 

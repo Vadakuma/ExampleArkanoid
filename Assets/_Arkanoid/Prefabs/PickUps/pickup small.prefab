@@ -29,7 +29,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4456598078140582
 Transform:
@@ -116,8 +116,8 @@ MonoBehaviour:
   pickUpSettings:
     lifeTime: 3
     deathTime: 0.05
-    movementShiftLimits: {x: -5, y: 5}
-    spawnPositionShift: {x: 0, y: 0}
+    spawnPosShiftLimits: {x: -5, y: 5}
+    spawnPositionShift: {x: 0, y: 0, z: 0}
 --- !u!136 &136825500963529038
 CapsuleCollider:
   m_ObjectHideFlags: 1

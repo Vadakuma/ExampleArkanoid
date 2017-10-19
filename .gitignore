@@ -3,10 +3,8 @@
 /*.userprefs
 /obj
 /Library/*.log
-/Library/metadata
 /Assets/*.meta
 *.meta
 /Temp
-/Library
 /Out
 /.vs/TaskArkanoid_U2017.2/v15/sqlite3/storage.ide

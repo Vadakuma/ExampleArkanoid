@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+/** Weapon is dummy for this project
+ * */
 namespace Arkanoid
 {
     public interface IWeapon
@@ -44,7 +45,7 @@ namespace Arkanoid
 
         }
 
-
+        /** */
         public void Fire()
         {
             GameObject go = Instantiate(GetWeaponSettings.GetProjectile);

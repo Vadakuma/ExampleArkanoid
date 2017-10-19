@@ -29,11 +29,13 @@ namespace Arkanoid
             }*/
         }
 
+        /** simple scene load */
         public void Load(int sceneindex)
         {
             SceneManager.LoadScene(sceneindex, LoadSceneMode.Single);
         }
 
+        /** Activate async loaded scene*/
         public void Activation()
         {
             if(async != null)

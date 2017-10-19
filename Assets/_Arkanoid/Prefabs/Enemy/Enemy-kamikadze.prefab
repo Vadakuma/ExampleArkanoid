@@ -27,7 +27,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967294
   m_IsActive: 1
 --- !u!1 &1381035291375654
 GameObject:
@@ -41,10 +41,10 @@ GameObject:
   - component: {fileID: 65826968180563956}
   m_Layer: 0
   m_Name: Enemy-kamikadze
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967294
   m_IsActive: 1
 --- !u!4 &4075000762361844
 Transform:
@@ -158,6 +158,6 @@ MonoBehaviour:
     weapon: {fileID: 0}
   kamikadzeSettings:
     waitTime: 5
-    speed: 0.1
+    speed: 0.25
     minAttackDist: 0.5
     damage: 1

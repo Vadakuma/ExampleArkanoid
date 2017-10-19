@@ -40,23 +40,21 @@ namespace Arkanoid
             return activeEnemy.Count;
         }
 
-        /** */
+        /** Make all enemies in Action state**/
         public void UnPauseEnemies()
         {
-            //Debug.Log("UnPauseEnemies");
             foreach (Enemy e in activeEnemy)
                 e.ToActiveStateActivate();
         }
 
-        /** */
+        /** Make all enemies in Idle state*/
         public void PauseEnemies()
         {
-            //Debug.Log("PauseEnemies");
             foreach (Enemy e in activeEnemy)
                 e.ToIdleStateActivate();
         }
 
-        /** */
+        /** If enemy  is dead - remove it from active list!*/
         public void RemoveFromActive(Enemy e)
         {
             activeEnemy.Remove(e);
@@ -100,7 +98,7 @@ namespace Arkanoid
                     deltapos.z = -ls.cell.y * row;
                     pos = basepos + deltapos;
 
-                    e = SetObjectPostion(enemyPool.GetRandomObject(), pos);
+                    e = SetObjectPosition(enemyPool.GetRandomObject(), pos);
                     e.Activate(enemyPool);
                     activeEnemy.Add(e);
 
@@ -115,7 +113,7 @@ namespace Arkanoid
             }
         }
 
-        private Enemy SetObjectPostion(Enemy e, Vector3 pos)
+        private Enemy SetObjectPosition(Enemy e, Vector3 pos)
         {
             e.transform.localPosition = pos;
             return e;

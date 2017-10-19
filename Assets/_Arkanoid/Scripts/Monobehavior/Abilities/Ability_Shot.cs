@@ -20,7 +20,6 @@ namespace Arkanoid
         {
             ps = p.GetPlatformSettings;
             GameObject.Instantiate(abilitySettings.fireprojectile, p.transform.position, p.transform.rotation);
-            //Debug.Log("Ability_FireUp Apply");
         }
     }
 }
