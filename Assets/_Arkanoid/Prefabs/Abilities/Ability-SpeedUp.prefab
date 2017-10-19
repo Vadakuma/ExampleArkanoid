@@ -52,5 +52,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   abilitySettings:
-    lifetime: 0
+    lifetime: 2
     speedfactor: 1.5

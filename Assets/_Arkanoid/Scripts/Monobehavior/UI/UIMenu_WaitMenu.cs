@@ -2,18 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 namespace Arkanoid
 {
-    public class GameState : MonoBehaviour
+    [RequireComponent(typeof(CanvasGroup))]
+    [RequireComponent(typeof(CanvasGroupController))]
+    public class UIMenu_WaitMenu : UIMenu
     {
-
-        // Use this for initialization
-        void Start()
-        {
-
-        }
-
         // Update is called once per frame
         void Update()
         {

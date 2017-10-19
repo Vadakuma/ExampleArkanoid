@@ -2,21 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 namespace Arkanoid
 {
-    public class HUD : MonoBehaviour
+    public class Enemy_SimpleBrick : Enemy
     {
 
         // Use this for initialization
-        void Start()
+        /*void Start()
         {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
+            state = new EnemyActiveState(this);
+        }*/
     }
 }

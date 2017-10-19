@@ -53,4 +53,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilitySettings:
     lifetime: 0
-    health: 100
+    health: 3

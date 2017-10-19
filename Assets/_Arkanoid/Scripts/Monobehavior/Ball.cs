@@ -5,37 +5,54 @@ using UnityEngine;
 
 namespace Arkanoid
 {
-    /** Projectile is easy bounce ball.
+    /** Unique projectile actor as easy bouncy ball.
      * */
     [RequireComponent(typeof(Rigidbody))]
-    public class Projectile : MonoBehaviour
+    public class Ball : MonoBehaviour
     {
         [SerializeField]
         protected int   damage;
         [SerializeField]
         protected float speed;
+        [SerializeField]
+        protected float destroyTime;
+        [SerializeField, Tooltip("Not stable")]
+        protected bool  useStickToplatformEffect = false;
 
         public int      DamageAmount { get { return damage; } private set { } }
         public float    Speed { get { return speed; } private set { } }
 
         private Rigidbody   projectileRigidbody;
         private Rigidbody   playerRigidbody;
-
+        private Collider    projectileCollider;
         private Vector3     direction = Vector3.zero;
         private Vector3     lastDirection = Vector3.zero;
         private Vector3     velocity = Vector3.zero;
 
         private readonly Vector3 initdir = new Vector3(1, 1, 1);
+        private          Vector3 initpos;
 
-        private WaitForSeconds stickingwait = new WaitForSeconds(0.15f);
+
+        private WaitForSeconds stickingwait = new WaitForSeconds(0.05f);
+
+        private static Ball _instance;
+        public static Ball Instance { get { return _instance; } private set { _instance = value; } }
+
+
+        void Awake()
+        {
+            Instance = this;
+            projectileRigidbody = GetComponent<Rigidbody>();
+
+            initpos = transform.position;
+        }
 
         // Use this for initialization
         void Start()
         {
-            projectileRigidbody = GetComponent<Rigidbody>();
-
             // initial inpulse
-            StartMoving();
+
+            StopMoving();
         }
 
 
@@ -45,13 +62,26 @@ namespace Arkanoid
         }
 
         // Update is called once per frame
-        void Update() {     }
+        void Update() {    }
+
+        /** Set to initial position,reactivate components, stop moving  */
+        public void ResetProjectile()
+        {
+            gameObject.SetActive(true);
+            transform.position = initpos;
+            if (projectileCollider)
+                projectileCollider.enabled = true;
+            StopMoving();
+        }
 
         /** */
         public void StopMoving()
         {
-            lastDirection = projectileRigidbody.velocity;
-            projectileRigidbody.velocity = Vector3.zero;
+            if (projectileRigidbody != null)
+            {
+                lastDirection = projectileRigidbody.velocity;
+                projectileRigidbody.velocity = Vector3.zero;
+            }
         }
 
         /** */
@@ -66,11 +96,11 @@ namespace Arkanoid
         /** Colliding for scene object - wall or player platform*/
         void OnCollisionEnter(Collision collisionInfo)
         {
-            Debug.Log("Projectile OnCollisionEnter");
+            //Debug.Log("Projectile OnCollisionEnter");
             ContactPoint cp = collisionInfo.contacts[0];
 
             // Checking and calculate the next direction to move
-            if (collisionInfo.gameObject.CompareTag("Player"))
+            if (useStickToplatformEffect && collisionInfo.gameObject.CompareTag("Player"))
             {
                 lastDirection = projectileRigidbody.velocity;
                 if (playerRigidbody == null)
@@ -94,8 +124,41 @@ namespace Arkanoid
             Enemy e = collisionInfo.gameObject.GetComponent<Enemy>();
             if (collisionInfo.gameObject.CompareTag("Enemy") || e != null)
             {
+                //Debug.Log("AddDamage: " + e);
                 e.AddDamage(DamageAmount);
             }
+
+            // Touch the back wall is the end of game session!
+            if (collisionInfo.gameObject.CompareTag("BackWall"))
+            {
+                DestroyEffects();
+                DestroyState();
+            }
+        }
+
+        /** */
+        private void DestroyState()
+        {
+            if (projectileCollider == null)
+            {
+                Collider c = gameObject.GetComponent<Collider>();
+                if (c != null)
+                {
+                    projectileCollider = c;
+                }
+            }
+            if (projectileCollider)
+                projectileCollider.enabled = false;
+
+            // initiate destroy procedure
+            //Destroy(gameObject, destroyTime);
+            gameObject.SetActive(false);
+        }
+
+        /* Spawn some destroy effects **/
+        private void DestroyEffects()
+        {
+
         }
 
         /** Moving with platform direction for a while time

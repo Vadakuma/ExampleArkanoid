@@ -96,8 +96,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickUpSettings:
-    lifeTime: 10
+    lifeTime: 3
+    deathTime: 0.5
     movementShiftLimits: {x: -5, y: 5}
+    spawnPositionShift: {x: 0, y: 0}
 --- !u!136 &136267962869760152
 CapsuleCollider:
   m_ObjectHideFlags: 1

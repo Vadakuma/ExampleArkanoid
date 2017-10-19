@@ -30,7 +30,8 @@ namespace Arkanoid
         // 
         private     InputControl        inputcontrol;
         // base settings about movement and health
-        protected   PlatformSettings    platformSettings;   
+        protected   PlatformSettings    platformSettings;
+        protected   Platform            parent;
 
         public InitialState(Platform platform)
         {
@@ -39,6 +40,8 @@ namespace Arkanoid
 
         public virtual void Init(Platform platform)
         {
+            parent = platform;
+            platformSettings = platform.GetPlatformSettings;
             inputcontrol = new InputControl();
         }
 
@@ -58,7 +61,14 @@ namespace Arkanoid
 
         public void AddAbility(Platform platform, IAbility ability)
         {
-            ability.Apply(platform);
+            try
+            {
+                ability.Apply(platform);
+            }
+            catch
+            {
+
+            }
         }
 
         public void GoToNextState() { }
@@ -84,7 +94,7 @@ namespace Arkanoid
         {
             curpos = platform.transform.position; // set initial position
             pos = platform.transform.position; // set initial position
-            platformSettings = platform.GetPlatformSettings; 
+
         }
 
         /** */
@@ -128,7 +138,12 @@ namespace Arkanoid
 
         public override void AddDamage( int amount)
         {
-
+            if (platformSettings.Health > 0)
+            {
+                platformSettings.Health -= amount;
+                if (platformSettings.Health < 1)
+                    parent.GoToDeadState();
+            }
         }
     }
 
@@ -141,6 +156,24 @@ namespace Arkanoid
 
         public new void Init(Platform platform) { }
         public new void Update(Platform platform) {   }
+        public new void MoveTo(Platform platform, int side) { }
+    }
+
+    /*
+     * Stop moving, get damage and ability restore data and postion
+     */
+    public class ResetState : InitialState
+    {
+        public ResetState(Platform platform) : base(platform) {
+            platform.transform.position = Platform.Initpos;
+            platformSettings.Health = platformSettings.MaxHealth;
+        }
+
+        public new void Init(Platform platform) { }
+        public new void Update(Platform platform) {
+            if (parent)
+                parent.GoToActiveState();
+        }
         public new void MoveTo(Platform platform, int side) { }
     }
 
@@ -163,8 +196,11 @@ namespace Arkanoid
         [SerializeField, Tooltip(" ")]
         protected Vector2   movementShiftLimits = new Vector2(-10, 10);
 
+
+       
+
         // max platform speed
-        public float    Speed { get { return speed; } set { speed = value; } }
+        public float    Speed { get { return speed * SpeedUpFactor; } set { speed = value; } }
         // How fast we will get zero speed
         public float    SpeedDampness { get { return speedDampness; } }
         // How fast we will get max speed after input command
@@ -172,6 +208,9 @@ namespace Arkanoid
         public Vector2  GetMovementShiftLimits { get { return movementShiftLimits; } }
         public int      Health{ get { return health; } set { health = value; } }
         public int      MaxHealth { get { return maxHealth; } }
+
+        public float   speedUpFactor = 1.0f;
+        public float    SpeedUpFactor { get { return speedUpFactor; } set { speedUpFactor = value; }  }
     }
 
 
@@ -181,31 +220,34 @@ namespace Arkanoid
     [RequireComponent(typeof(Rigidbody))] // for gameplay staff need rigidbody
     public class Platform : MonoBehaviour
     {
-        [SerializeField, Tooltip("Base settings about movement,health, ...")] // see GameData.cs
+        [SerializeField, Tooltip("Base settings about movement, health, ...")] // see GameData.cs
         protected PlatformSettings platformSettings = new PlatformSettings();
+        //Base settings about movement and health
+        public PlatformSettings GetPlatformSettings { get { return platformSettings; } private set { } }
 
         // platform state switcher
-        private /*static*/ IPlatformState state;
+        private static IPlatformState state;
+        public static IPlatformState State { get { return state; } private set { state = value; } }
 
         private static Platform _instance;
-
         public static Platform Instance { get { return _instance; } private set { _instance = value; } }
-        public /*static*/ IPlatformState State { get { return state; } private set { state = value; } }
 
-        //Base settings about movement and health
-        public PlatformSettings     GetPlatformSettings { get { return platformSettings; } private set { } }
 
+        // initial position at start scene
+        public static Vector3 initpos;
+        public static Vector3 Initpos { get { return initpos; } private set { initpos = value; } }
 
         void Awake()
         {
             Instance = this;
+            initpos = transform.position;
         }
 
         // Use this for initialization
         void Start()
         {
-            // starting
-            GoToActiveState();
+            // starting  
+            GoToIdleState();
         }
 
         // Update is called once per frame
@@ -214,8 +256,13 @@ namespace Arkanoid
             state.Update(this);
         }
 
-        /** Stop moving, get damage and ability*/
+        /** Stop moving, damage and ability*/
         public void GoToIdleState()
+        {
+            state = new IdleState(this);
+        }
+
+        public void GoToDeadState()
         {
             state = new IdleState(this);
         }
@@ -224,6 +271,11 @@ namespace Arkanoid
         public void GoToActiveState()
         {
             state = new ActionState(this);
+        }
+
+        public void GoToResetState()
+        {
+            state = new ResetState(this);
         }
 
         /** moving*/
@@ -243,18 +295,13 @@ namespace Arkanoid
         {
             state.AddAbility(this, pickup.AbilityContainer);
 
-            pickup.DeActivate();
-        }
-
-
-        private void OnTriggerEnter(Collider other)
-        {
-            Debug.Log("OnTriggerEnter");
+            pickup.DeActivateState();
         }
 
         private void OnDestroy()
-        {
-            state.Disable();
+        { 
+            if(state != null)
+                state.Disable();
         }
     }
 }
