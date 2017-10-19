@@ -8,7 +8,7 @@ namespace Arkanoid
     /** Unique projectile actor as easy bouncy ball.
      * */
     [RequireComponent(typeof(Rigidbody))]
-    public class Projectile : MonoBehaviour
+    public class Ball : MonoBehaviour
     {
         [SerializeField]
         protected int   damage;
@@ -35,8 +35,8 @@ namespace Arkanoid
 
         private WaitForSeconds stickingwait = new WaitForSeconds(0.05f);
 
-        private static Projectile _instance;
-        public static Projectile Instance { get { return _instance; } private set { _instance = value; } }
+        private static Ball _instance;
+        public static Ball Instance { get { return _instance; } private set { _instance = value; } }
 
 
         void Awake()

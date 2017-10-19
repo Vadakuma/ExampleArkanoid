@@ -47,7 +47,7 @@ namespace Arkanoid
         public void SetActiveGameActors()
         {
             // update value
-            Projectile.Instance.StartMoving();
+            Ball.Instance.StartMoving();
             EnemyManager.Instance.UnPauseEnemies();
             PickUpManager.Instance.UnPauseSpawn();
             Platform.Instance.GoToActiveState();
@@ -59,7 +59,7 @@ namespace Arkanoid
         public void SetDeActiveGameActors()
         {
             // update value
-            Projectile.Instance.StopMoving();
+            Ball.Instance.StopMoving();
             EnemyManager.Instance.PauseEnemies();
             PickUpManager.Instance.PauseSpawn();
             Platform.Instance.GoToIdleState();
@@ -81,8 +81,8 @@ namespace Arkanoid
         {
             StateName = "InPlayState";
 
-            if (Projectile.Instance)
-                Projectile.Instance.StartMoving();
+            if (Ball.Instance)
+                Ball.Instance.StartMoving();
            
 
             // activate checking win conditions
@@ -135,8 +135,8 @@ namespace Arkanoid
         public GameStatus CheckWinConditions()
         {
             // update value
-            if (Projectile.Instance)
-                projectileLink = Projectile.Instance.gameObject;
+            if (Ball.Instance)
+                projectileLink = Ball.Instance.gameObject;
             else
                 projectileLink = null;
             enemiesAmount = EnemyManager.Instance.GetActiveEnemiesAmount();
@@ -318,7 +318,7 @@ namespace Arkanoid
         // Update is called once per frame
         void Update()  {
             state.Update();
-            Debug.Log("|||" + state.ToString());
+           // Debug.Log("|||" + state.ToString());
 
             if (Input.GetKeyDown(KeyCode.Space))
                 GoToWaitState();

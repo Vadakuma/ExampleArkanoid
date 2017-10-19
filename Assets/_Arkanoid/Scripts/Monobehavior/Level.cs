@@ -60,15 +60,15 @@ namespace Arkanoid
         /** */
         private void SpawnProjectile()
         {
-            if(Projectile.Instance != null)
+            if(Ball.Instance != null)
             {
                 // stop and reset position
-                Projectile.Instance.ResetProjectile();
+                Ball.Instance.ResetProjectile();
             }
             else
             {
                 // check and spawn
-                if (projectile && projectile.GetComponent<Projectile>() != null)
+                if (projectile && projectile.GetComponent<Ball>() != null)
                 {
                     Instantiate(projectile);
                     //Projectile.Instance.SetInitialPosition();
@@ -118,8 +118,6 @@ namespace Arkanoid
 
         public void ResetLevel(LevelSettings _ls)
         {
-            EnemyManager.Instance.ReturnToPoolAll();
-            Debug.Log("ResetLevel: " + _ls.enemyAmount + "||"+ _ls.columns);
             EnemyManager.Instance.GenerateEnemyPosition(_ls);
         }
     }

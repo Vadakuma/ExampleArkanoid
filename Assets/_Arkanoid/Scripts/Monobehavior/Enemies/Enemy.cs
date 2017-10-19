@@ -9,7 +9,6 @@ namespace Arkanoid
      * *************************************************************************************************/
     public interface IEnemyState
     {
-
         void Update();
         void AddDamage(Enemy e, int amount);
     }
@@ -20,6 +19,11 @@ namespace Arkanoid
         protected Enemy parent;
         protected BaseEnemySettings bes;
 
+        public EnemyBaseState(Enemy e)
+        {
+            SetSettings(e);
+        }
+
         public virtual void Update() { }
         public virtual void AddDamage(Enemy e, int amount) { }
 
@@ -29,7 +33,7 @@ namespace Arkanoid
             if (parent)
             {
                 bes = parent.GetEnemySettings;
-                bes.Init();
+                bes.Reset();
             }
         }
     }
@@ -38,7 +42,7 @@ namespace Arkanoid
     [System.Serializable]
     public class EnemyActiveState : EnemyBaseState
     {
-        public EnemyActiveState(Enemy e)
+        public EnemyActiveState(Enemy e) :base(e)
         {
             SetSettings(e);
             ActivateEffects();
@@ -54,7 +58,11 @@ namespace Arkanoid
             {
                 bes.Health -= amount;
                 if (bes.Health < 1)
+                {
+                    // we are dead!
                     e.ToDeadStateActivate();
+                    GameData.ApplyScore(bes.Score);
+                }
             }
             else
             {
@@ -70,7 +78,8 @@ namespace Arkanoid
     [System.Serializable]
     public class EnemyDeadState : EnemyBaseState
     {
-        public EnemyDeadState(Enemy e) {
+        public EnemyDeadState(Enemy e) : base(e)
+        {
             SetSettings(e);
             DeadEffects();
             ReturnToThePool();
@@ -85,7 +94,6 @@ namespace Arkanoid
         protected void ReturnToThePool()
         {
             EnemyManager.Instance.RemoveFromActive(parent);
-            //Debug.Log("ReturnToThePool");
             parent.ParentPool.ReturnEnemy(parent);
             parent.ToIdleStateActivate();
         }
@@ -96,7 +104,7 @@ namespace Arkanoid
     [System.Serializable]
     public class EnemyIdleState : EnemyBaseState
     {
-        public EnemyIdleState(Enemy e)
+        public EnemyIdleState(Enemy e) : base(e)
         {
             SetSettings(e);
         }
@@ -107,42 +115,64 @@ namespace Arkanoid
     /***************************************************************************************************
     * Enemy SETTINGS
     * *************************************************************************************************/
+
+    public interface IEnemySettings
+    {
+        void Reset();
+    }
+
     [System.Serializable]
-    public class BaseEnemySettings
+    public class BaseEnemySettings : IEnemySettings
     {
         [SerializeField, Tooltip("Maximum platform health")]
         protected int   maxHealth;
         [SerializeField, Tooltip(" ")]
         protected int   score;
-
+        [SerializeField, Tooltip(" ")]
+        protected Weapon weapon;
         public int MaxHealth { get { return maxHealth; } }
         public int Health { get;  set; }
         public int Score { get { return score; } private set { } }
 
-        public void Init()
+        // Enemy weapon for some attack actions ()
+       
+        public Weapon GetWeapon { get { return weapon; } }
+
+        //TODO: Pawn(for body control), AI, ... 
+
+        private IEnemySettings specialEnemySettings;
+        public IEnemySettings GetSpecialEnemySettings { get { return specialEnemySettings; } set { specialEnemySettings = value; } }
+
+        public void Reset()
         {
             Health = MaxHealth;
+
+            if(specialEnemySettings != null)
+                specialEnemySettings.Reset();
         }
     }
 
-
+    /***************************************************************************************************
+        * Enemy MONO 
+        * *************************************************************************************************/
     public class Enemy : MonoBehaviour
     {
         [SerializeField]
-        protected BaseEnemySettings baseEnemySettings = new BaseEnemySettings();
+        protected BaseEnemySettings enemySettings = new BaseEnemySettings();
 
         protected   IEnemyState state;
         protected   EnemyPool   parentpool;
 
         public IEnemyState State { get { return state; } set { state = value; } }
+
         public EnemyPool ParentPool { get { return parentpool; } set { parentpool = value; } }
         //Base settings about movement and health
-        public BaseEnemySettings GetEnemySettings { get { return baseEnemySettings; } private set { } }
+        public BaseEnemySettings GetEnemySettings { get { return enemySettings; } private set { } }
 
         // Use this for initialization
         void Start()
         {
-            state = new EnemyActiveState(this);
+            State = new EnemyActiveState(this);
         }
 
         // Update is called once per frame
@@ -174,7 +204,7 @@ namespace Arkanoid
         }
 
         /** */
-        public void ToActiveStateActivate()
+        public virtual void ToActiveStateActivate()
         {
             state = new EnemyActiveState(this);
         }

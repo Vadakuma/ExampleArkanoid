@@ -10,16 +10,17 @@ namespace Arkanoid
         protected Transform         enemySpawnPoint;
         [SerializeField, Tooltip("Set the parent object for enemies")]
         protected Transform         enemyParentObject;
-        [SerializeField]
+        [SerializeField,Tooltip("List with enemies prefabs for spawn in the pool")]
         protected List<GameObject>   enemies = new List<GameObject>();
 
 
         private static EnemyManager _instance;
         public static EnemyManager Instance { get { return _instance; } private set { _instance = value; } }
 
-        private List<Enemy> activeEnemy = new List<Enemy>();
-
-        private EnemyPool enemyPool;
+        // list with active enemies (not dead) on the scene
+        private List<Enemy>     activeEnemy = new List<Enemy>();
+        // simple enemy pool
+        private EnemyPool       enemyPool;
 
         void Awake()
         {
@@ -62,7 +63,7 @@ namespace Arkanoid
         }
 
         /** Return all active enemies to the parent pool*/
-        public void ReturnToPoolAll()
+        private void ReturnToPoolAll()
         {
             for (int idx = 0; idx < activeEnemy.Count; ++idx)
             {
@@ -79,10 +80,15 @@ namespace Arkanoid
 
             if (amount > 0 && enemyPool != null)
             {
-                activeEnemy.Clear();
-                ls = GameState.gameData.GetRandomLevelSettings;
+                // before spawn we will return all enemies at this pool
+                ReturnToPoolAll();
+
                 Vector3 pos = Vector3.zero;
                 Vector3 deltapos = Vector3.zero;
+                Vector3 basepos = enemySpawnPoint.transform.position;
+                // special shift for spwan position.
+                // With this shif enemySpawnPoint will be in the middle of the objects row. 
+                basepos.x -= ((ls.columns) * ls.cell.x) / 2 - ls.cell.x / 2;
 
                 int column = 0;
                 int row = 0;
@@ -91,8 +97,8 @@ namespace Arkanoid
                 {
                     // calculate new positio by row and column values
                     deltapos.x = ls.cell.x * column;
-                    deltapos.z = ls.cell.y * row;
-                    pos = enemySpawnPoint.transform.position + deltapos;
+                    deltapos.z = -ls.cell.y * row;
+                    pos = basepos + deltapos;
 
                     e = SetObjectPostion(enemyPool.GetRandomObject(), pos);
                     e.Activate(enemyPool);
@@ -111,7 +117,7 @@ namespace Arkanoid
 
         private Enemy SetObjectPostion(Enemy e, Vector3 pos)
         {
-            e.transform.position = pos;
+            e.transform.localPosition = pos;
             return e;
         }
 

@@ -9,7 +9,7 @@ namespace Arkanoid
      * */
     public class EnemyPool
     {
-        private static int          poolSize = 0;
+        private int                 poolSize = 0;
         private List<Enemy>         enemies_ = new List<Enemy>();
         private List<GameObject>    prefabs_ = new List<GameObject>();
 
@@ -44,6 +44,12 @@ namespace Arkanoid
         }
 
         /** */
+        public int GetPoolSize()
+        {
+            return enemies_.Count ;
+        }
+
+        /** */
         public Enemy GetRandomObject()
         {
             for (int idx = 0; idx < poolSize; ++idx)
@@ -55,6 +61,7 @@ namespace Arkanoid
             }
             enemies_.Add(GameObject.Instantiate(prefabs_[Random.Range(0, prefabs_.Count)]).GetComponent<Enemy>());
             enemies_[enemies_.Count - 1].transform.SetParent(parent);
+            enemies_[enemies_.Count - 1].ParentPool = this;
             poolSize++;
             return enemies_[enemies_.Count - 1];
         }

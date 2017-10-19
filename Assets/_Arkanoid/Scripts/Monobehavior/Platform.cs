@@ -214,19 +214,18 @@ namespace Arkanoid
     [RequireComponent(typeof(Rigidbody))] // for gameplay staff need rigidbody
     public class Platform : MonoBehaviour
     {
-        [SerializeField, Tooltip("Base settings about movement,health, ...")] // see GameData.cs
+        [SerializeField, Tooltip("Base settings about movement, health, ...")] // see GameData.cs
         protected PlatformSettings platformSettings = new PlatformSettings();
+        //Base settings about movement and health
+        public PlatformSettings GetPlatformSettings { get { return platformSettings; } private set { } }
 
         // platform state switcher
-        private /*static*/ IPlatformState state;
+        private static IPlatformState state;
+        public static IPlatformState State { get { return state; } private set { state = value; } }
 
         private static Platform _instance;
-
         public static Platform Instance { get { return _instance; } private set { _instance = value; } }
-        public /*static*/ IPlatformState State { get { return state; } private set { state = value; } }
 
-        //Base settings about movement and health
-        public PlatformSettings     GetPlatformSettings { get { return platformSettings; } private set { } }
 
         // initial position at start scene
         public static Vector3 initpos;
@@ -291,11 +290,6 @@ namespace Arkanoid
             state.AddAbility(this, pickup.AbilityContainer);
 
             pickup.DeActivateState();
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            Debug.Log("OnTriggerEnter");
         }
 
         private void OnDestroy()

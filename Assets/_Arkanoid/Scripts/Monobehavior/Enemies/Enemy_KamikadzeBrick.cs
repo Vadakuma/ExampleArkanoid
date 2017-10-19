@@ -5,55 +5,50 @@ using UnityEngine;
 namespace Arkanoid
 {
     [System.Serializable]
-    public class KamikadzeBrickSettings
+    public class KamikadzeBrickSettings : IEnemySettings
     {
-        [SerializeField, Tooltip("Wait time to attack")]
-        protected float waitTime;
+        [SerializeField, Tooltip("Max wait time to attack")]
+        protected float     waitTime;
         [SerializeField, Tooltip("Speed multiplier")]
-        protected float speed;
-
+        protected float     speed;
+        [SerializeField, Tooltip(" ")]
+        protected float     minAttackDist = 0.5f;
+        [SerializeField, Tooltip(" ")]
+        protected int       damage = 1;
         // max speed
-        public float Speed { get { return speed; } }
-        public float WaitTime { get { return waitTime; } }
+        public float    Speed { get { return speed; } }
+        public float    WaitTime { get { return waitTime; } }
+        public float    MinAttackDist { get { return minAttackDist; } }
+        public int      Damage { get { return damage; } }
+
+        public void Reset()
+        {
+
+        }
     }
 
-    /**  */
-    public interface IEnemyKamikadzeState
-    {
-        void GetSpecialSettings();
-    }
-
+    /** New Active State for Kamikadze Brick
+     * */
     [System.Serializable]
-    public abstract class EnemyKamikadzeState : EnemyActiveState, IEnemyKamikadzeState
+    public abstract class EnemyKamikadzeActiveState : EnemyActiveState
     {
         protected KamikadzeBrickSettings kamikadzeBrickSettings;
 
-        public EnemyKamikadzeState(Enemy e):base (e)
+        public EnemyKamikadzeActiveState(Enemy e) :base (e)
         {
-            SetSettings(e);
-            // temp
-            GetSpecialSettings();
-        }
-        // temp
-        public void GetSpecialSettings()
-        {
-            kamikadzeBrickSettings = (parent as Enemy_KamikadzeBrick).GetKamikadzeSettings;
+            kamikadzeBrickSettings = e.GetEnemySettings.GetSpecialEnemySettings as KamikadzeBrickSettings;
         }
     }
 
     /** Main active life state*/
     [System.Serializable]
-    public class EnemyKamikadzeWaitState : EnemyKamikadzeState
+    public class EnemyKamikadzeWaitState : EnemyKamikadzeActiveState
     {
         private float waitTime = 0;
         public EnemyKamikadzeWaitState(Enemy e) : base (e)
         {
-            SetSettings(e);
-            GetSpecialSettings();
-
-            waitTime = kamikadzeBrickSettings.WaitTime;
+            waitTime = Random.Range(0, kamikadzeBrickSettings.WaitTime);
         }
-
 
         public override void Update()
         {
@@ -67,18 +62,47 @@ namespace Arkanoid
 
     /** Main active life state*/
     [System.Serializable]
-    public class EnemyKamikadzeAttackState : EnemyKamikadzeState
+    public class EnemyKamikadzeAttackState : EnemyKamikadzeActiveState
     {
+        private Transform   bricktr;
+        private Transform   platformtr;
+        private Vector3     dir = Vector3.zero;
+        private float       dist;
+        private bool        isActive = false;
+
         public EnemyKamikadzeAttackState(Enemy e) : base (e)
         {
-            SetSettings(e);
-            GetSpecialSettings();
-            //Debug.Log("EnemyKamikadzeAttackState");
+            bricktr = e.transform;
+            platformtr = Platform.Instance.transform;
+            isActive = true; // let stat attack!
         }
 
+        /** */
         public override void Update()
         {
-            // move and attack staff
+            
+            if (isActive)
+            {
+                // move and attack staff
+                dist = Vector3.Distance(platformtr.position, bricktr.position);
+                if (dist < kamikadzeBrickSettings.MinAttackDist)
+                    ExplodeAction();
+                // direction to the platform
+                dir = platformtr.position - bricktr.position;
+                // move on last calculate direction
+                bricktr.Translate(dir.normalized * Time.deltaTime * kamikadzeBrickSettings.Speed);
+            }
+        }
+
+        /** */
+        private void ExplodeAction()
+        {
+            Debug.Log("ExplodeAction!");
+            isActive = false;
+            if (Platform.Instance)
+                Platform.Instance.AddDamage(kamikadzeBrickSettings.Damage);
+            // dying stuff
+            parent.ToDeadStateActivate();
         }
     }
 
@@ -93,6 +117,15 @@ namespace Arkanoid
 
         // Use this for initialization
         void Start()
+        {
+            // include special settings for this  enemy class 
+            GetEnemySettings.GetSpecialEnemySettings = GetKamikadzeSettings;
+
+            state = new EnemyKamikadzeWaitState(this);
+        }
+
+        /** */
+        public override void ToActiveStateActivate()
         {
             state = new EnemyKamikadzeWaitState(this);
         }

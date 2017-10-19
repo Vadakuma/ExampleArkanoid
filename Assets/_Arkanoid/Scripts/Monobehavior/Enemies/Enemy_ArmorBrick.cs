@@ -6,14 +6,13 @@ using UnityEngine;
 
 namespace Arkanoid
 {
-
     /** more health*/
     public class Enemy_ArmorBrick : Enemy
     {
 
-        void Start()
+        /*void Start()
         {
             state = new EnemyActiveState(this);
-        }
+        }*/
     }
 }

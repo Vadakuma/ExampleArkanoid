@@ -107,8 +107,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5122e97c4bfc9e14292fc72a49f1dd92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseEnemySettings:
-    maxHealth: 1
+  enemySettings:
+    maxHealth: 0
+    score: 0
+    weapon: {fileID: 0}
   kamikadzeSettings:
-    waitTime: 0
-    speed: 0
+    waitTime: 5
+    speed: 0.1
+    minAttackDist: 0.5
+    damage: 1

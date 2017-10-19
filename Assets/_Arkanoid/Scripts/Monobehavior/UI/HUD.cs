@@ -9,17 +9,17 @@ namespace Arkanoid
     public class HUD : MonoBehaviour
     {
         [SerializeField, Tooltip("Rand from 0 to value")]
-        protected float updatenFrequency = 0.1f;
+        protected float     updatenFrequency = 0.1f;
         [SerializeField]
-        protected Text hightscore;
+        protected Text      hightscore;
         [SerializeField]
-        protected Text roundindex;
+        protected Text      roundindex;
         [SerializeField]
-        protected Text health;
+        protected Text      health;
 
         private WaitForSeconds      updatewait;
         private bool                isActive = false;
-        private PlatformSettings    ps;
+        private PlatformSettings    ps; // cash
 
         // Use this for initialization
         void Start()
@@ -28,6 +28,7 @@ namespace Arkanoid
             updatewait = new WaitForSeconds(updatenFrequency);
 
             ps = Platform.Instance.GetPlatformSettings;
+           
             isActive = true;
             StartCoroutine(UpdateHUD());
         }

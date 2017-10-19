@@ -12,21 +12,21 @@ MonoBehaviour:
   m_Name: GameData
   m_EditorClassIdentifier: 
   levelSettings:
-  - enemyAmount: 10
-    rows: 2
-    columns: 5
+  - enemyAmount: 6
+    rows: 3
+    columns: 2
     movementShiftLimits: {x: 0, y: 0}
     cell: {x: 1.5, y: 1.5}
     useAbilitySpawner: 0
-  - enemyAmount: 15
+  - enemyAmount: 12
     rows: 3
-    columns: 5
+    columns: 4
     movementShiftLimits: {x: 0, y: 0}
     cell: {x: 1.2, y: 1.2}
     useAbilitySpawner: 0
-  - enemyAmount: 8
+  - enemyAmount: 10
     rows: 2
-    columns: 4
+    columns: 5
     movementShiftLimits: {x: 0, y: 0}
     cell: {x: 1.6, y: 1.6}
     useAbilitySpawner: 0

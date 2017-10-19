@@ -155,7 +155,7 @@ namespace Arkanoid
         /** */
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log("Pickup Ability OnTriggerEnter");
+            //Debug.Log("Pickup Ability OnTriggerEnter");
             if(other.CompareTag("Player"))
             {
                 Platform player = other.gameObject.GetComponent<Platform>();

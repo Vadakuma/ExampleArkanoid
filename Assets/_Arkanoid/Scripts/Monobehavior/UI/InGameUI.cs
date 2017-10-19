@@ -69,7 +69,7 @@ namespace Arkanoid
             // need to save a data!
             StartCoroutine(sceneLoad.AsyncLoad(index));
             // Restart fade effect with special listener ActivateScene
-            inGameUICanvasContainer.cgcontroller.Fade(inGameUICanvasContainer.cgroup, 0.0f, 0.05f, false, OnFadeGoToScene);
+            inGameUICanvasContainer.cgcontroller.Fade(inGameUICanvasContainer.cgroup, 1.0f, 0.05f, false, OnFadeGoToScene);
         }
 
         public void GoToMainMenu()

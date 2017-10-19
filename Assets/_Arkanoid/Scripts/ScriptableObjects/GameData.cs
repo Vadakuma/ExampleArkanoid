@@ -22,11 +22,9 @@ namespace Arkanoid
         [SerializeField]
         protected List<PlayerData>      sessionsResults = new List<PlayerData>();
 
-
         protected static PlayerData        sessionPlayerData = new PlayerData();
 
-
-        [SerializeField]
+        /** Condition about win or lose stuff*/
         public SessionCondition GetLoseCondition
         {
             get
@@ -34,8 +32,7 @@ namespace Arkanoid
                 return loseCondition;
             }
         }
-
-        [SerializeField]
+        /** Params like a score during in the game session*/
         public static PlayerData SessionPlayerData
         {
             get
@@ -45,8 +42,19 @@ namespace Arkanoid
             private set { sessionPlayerData = value; }
         }
 
+        /** add score duting in the game session*/
+        public static void ApplyScore(int score)
+        {
+            sessionPlayerData.score += score;
+        }
 
-        [SerializeField]
+        public static void ResetScore(int score)
+        {
+            sessionPlayerData.score = 0;
+        }
+
+
+        /** for level generator*/
         public LevelSettings GetRandomLevelSettings {
             get {
                 if (levelSettings.Count > 0)

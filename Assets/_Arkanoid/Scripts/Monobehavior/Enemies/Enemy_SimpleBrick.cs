@@ -9,15 +9,9 @@ namespace Arkanoid
     {
 
         // Use this for initialization
-        void Start()
+        /*void Start()
         {
             state = new EnemyActiveState(this);
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
+        }*/
     }
 }
