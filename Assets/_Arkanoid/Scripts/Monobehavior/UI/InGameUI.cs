@@ -14,19 +14,27 @@ namespace Arkanoid
 
 
         private static InGameUI _instance;
-        public static InGameUI Instance { get { return _instance; } private set { _instance = value; } }
+        public  static InGameUI Instance { get { return _instance; } private set { _instance = value; } }
         // UICanvasContainer allow to easier make fadeInOut staff
         private UICanvasContainer   menu;
         private SceneLoad           sceneLoad = new SceneLoad();
         // UICanvasContainer allow to easier make fadeInOut staff
-        private UICanvasContainer   inGameUICanvasContainer = new UICanvasContainer();
+        private UICanvasContainer   inGameUICanvasContainer;
 
         // Use this for initialization
         void Awake()
         {
             Instance = this;
-            inGameUICanvasContainer.cgroup       = gameObject.GetComponent<CanvasGroup>();
-            inGameUICanvasContainer.cgcontroller = gameObject.GetComponent<CanvasGroupController>();
+            inGameUICanvasContainer = new UICanvasContainer(gameObject.GetComponent<CanvasGroup>(),
+                gameObject.GetComponent<CanvasGroupController>());
+
+            inGameUICanvasContainer.UpdateCanvasGroup(1, true, true); // fast dark in
+        }
+
+        void Start()
+        {
+            // start fade out
+            inGameUICanvasContainer.Fade(0, 0.05f, false); // fast dark out
         }
 
         /**collecting all menus from scene */
@@ -37,21 +45,21 @@ namespace Arkanoid
 
         public void SpawnPopup(string key)
         {
-            Debug.Log("SpawnPopup: " + key);
+            //Debug.Log("SpawnPopup: " + key);
             menus.TryGetValue(key, out menu);
             if(menu != null)
             {
-                menu.Restart(1.0f, 0.1f, false);
+                menu.Fade(1.0f, 0.1f, false);
             }
         }
 
         public void ClosePopup(string key)
         {
-            Debug.Log("ClosePopup: " + key);
+            //Debug.Log("ClosePopup: " + key);
             menus.TryGetValue(key, out menu);
             if (menu != null)
             {
-                menu.Restart(0.0f, 0.1f, false);
+                menu.Fade(0.0f, 0.1f, false);
             }
         }
 
@@ -61,7 +69,12 @@ namespace Arkanoid
             // need to save a data!
             StartCoroutine(sceneLoad.AsyncLoad(index));
             // Restart fade effect with special listener ActivateScene
-            inGameUICanvasContainer.cgcontroller.Restart(inGameUICanvasContainer.cgroup, 0.0f, 0.05f, false, OnFadeGoToScene);
+            inGameUICanvasContainer.cgcontroller.Fade(inGameUICanvasContainer.cgroup, 0.0f, 0.05f, false, OnFadeGoToScene);
+        }
+
+        public void GoToMainMenu()
+        {
+            GoToScene(0);
         }
 
         /** */
@@ -75,6 +88,12 @@ namespace Arkanoid
         {
             if (InGameUI.Instance)
                 InGameUI.Instance.SpawnPopup(key);
+        }
+
+
+        void OnDisable()
+        {
+
         }
     }
 }

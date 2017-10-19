@@ -61,6 +61,17 @@ namespace Arkanoid
             activeEnemy.Remove(e);
         }
 
+        /** Return all active enemies to the parent pool*/
+        public void ReturnToPoolAll()
+        {
+            for (int idx = 0; idx < activeEnemy.Count; ++idx)
+            {
+                activeEnemy[idx].ToIdleStateActivate();
+                activeEnemy[idx].ParentPool.ReturnEnemy(activeEnemy[idx]);
+            }
+            activeEnemy.Clear();
+        }
+
         /** example */
         public void GenerateEnemyPosition(LevelSettings ls)
         {

@@ -10,7 +10,7 @@ namespace Arkanoid
         [SerializeField, Tooltip("Level settings parametr dublicate!!")]
         protected bool              useAbilitySpawner = true;
         [SerializeField, Tooltip("Rand from 0 to value")]
-        protected static float      pickupSpawnFrequency = 15.0f;
+        protected float             pickupSpawnFrequency = 15.0f;
         [SerializeField, Tooltip("Prefabs for spawn")]
         protected List<GameObject>  pickups = new List<GameObject>();
 
@@ -18,13 +18,16 @@ namespace Arkanoid
         private static PickUpManager _instance;
         public  static PickUpManager Instance { get { return _instance; } private set { _instance = value; } }
 
-        private WaitForSeconds       spawnwait = new WaitForSeconds(pickupSpawnFrequency);
+        private WaitForSeconds       spawnwait;
         private GameObject           lastspawnedpickup;
 
         private bool isActive = false;
 
         void Awake()
         {
+            // for Coroutine
+            spawnwait = new WaitForSeconds(pickupSpawnFrequency);
+
             Instance = this;
 
             // TODO: should get this parametr from level settings
@@ -70,7 +73,6 @@ namespace Arkanoid
         public void UnPauseSpawn()
         {
             isActive = true;
-            StartCoroutine(GeneratePickUps());
         }
 
         /** */

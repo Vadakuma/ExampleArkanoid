@@ -40,17 +40,30 @@ namespace Arkanoid
             levelSettings = levelGenerator.Generate();
 
             // spawn projectile
-           // SpawnProjectile();
+            SpawnProjectile();
         }
 
+        /** setup btick by lase level settings*/
+        public void RestartLastLevel()
+        {
+            // levelGenerator = new SimpleGenerator(10, enemyPool, enemySpawnPoint);
+            if (levelGenerator == null)
+                levelGenerator = new SimpleGenerator();
 
+            levelGenerator.ResetLevel(levelSettings);
+
+            // reset settings in projectile or spawn a new one
+            SpawnProjectile();
+            
+        }
+
+        /** */
         private void SpawnProjectile()
         {
             if(Projectile.Instance != null)
             {
                 // stop and reset position
-                Projectile.Instance.SetInitialPosition();
-                Projectile.Instance.StopMoving();
+                Projectile.Instance.ResetProjectile();
             }
             else
             {
@@ -80,6 +93,7 @@ namespace Arkanoid
     public interface ILevelGenerator
     {
         LevelSettings Generate();
+        void ResetLevel(LevelSettings _ls);
     }
 
     /** Generate enemies for example*/ // temp
@@ -101,6 +115,13 @@ namespace Arkanoid
 
             return ls;
         }
+
+        public void ResetLevel(LevelSettings _ls)
+        {
+            EnemyManager.Instance.ReturnToPoolAll();
+            Debug.Log("ResetLevel: " + _ls.enemyAmount + "||"+ _ls.columns);
+            EnemyManager.Instance.GenerateEnemyPosition(_ls);
+        }
     }
 
     /** example*/
@@ -120,6 +141,8 @@ namespace Arkanoid
             Debug.Log("Generate: " + prefabName);
             return ls;
         }
+
+        public void ResetLevel(LevelSettings _ls) { }
     }
 
 }

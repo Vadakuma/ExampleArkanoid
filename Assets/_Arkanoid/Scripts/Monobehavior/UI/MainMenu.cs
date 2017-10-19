@@ -17,8 +17,8 @@ namespace Arkanoid
         // Use this for initialization
         void Start()
         {
-            uICanvasContainer.cgroup = gameObject.GetComponent<CanvasGroup>();
-            uICanvasContainer.cgcontroller = gameObject.GetComponent<CanvasGroupController>();
+            uICanvasContainer = new UICanvasContainer(gameObject.GetComponent<CanvasGroup>(),
+                gameObject.GetComponent<CanvasGroupController>());
         }
 
         // Update is called once per frame
@@ -29,14 +29,14 @@ namespace Arkanoid
         {
             StartCoroutine(sceneLoad.AsyncLoad(index));
             // Restart fade effect with special listener ActivateScene
-            uICanvasContainer.cgcontroller.Restart(uICanvasContainer.cgroup, 0.0f, 0.05f, false, OnFadeGoToScene);
+            uICanvasContainer.cgcontroller.Fade(uICanvasContainer.cgroup, 0.0f, 0.05f, false, OnFadeGoToScene);
         }
 
         /** */
         public void ApplicationQuit()
         {
             // Restart fade effect with special listener ActivateScene
-            uICanvasContainer.cgcontroller.Restart(uICanvasContainer.cgroup, 0.0f, 0.05f, false, OnFadeQuit);
+            uICanvasContainer.cgcontroller.Fade(uICanvasContainer.cgroup, 0.0f, 0.05f, false, OnFadeQuit);
         }
 
         /** */

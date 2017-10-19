@@ -23,11 +23,12 @@ namespace Arkanoid
 
         public InBaseGameState(IGameState prev)
         {
+            SetStateName(); // set state name first of all
+
             if (prev != null)
             {
                 prev.Disable();
             }
-            
 
             if (InGameUI.Instance)
                 InGameUI.Instance.SpawnPopup(StateName);
@@ -52,6 +53,8 @@ namespace Arkanoid
             Platform.Instance.GoToActiveState();
         }
 
+        protected virtual void SetStateName() { }
+
         /** */
         public void SetDeActiveGameActors()
         {
@@ -68,7 +71,7 @@ namespace Arkanoid
     {
         private WaitForSeconds waitbrforecheck = new WaitForSeconds(0.15f);
         private bool active = false;
-
+        private SessionCondition loseCondition;  
         // cach for win conditions checking
         private GameObject  projectileLink;
         private int         enemiesAmount;
@@ -80,11 +83,25 @@ namespace Arkanoid
 
             if (Projectile.Instance)
                 Projectile.Instance.StartMoving();
+           
+
             // activate checking win conditions
             if (GameState.Instance)
             {
-                active = true;
-                GameState.Instance.StartCoroutine(CheckConditions());
+                if (GameState.gameData != null)
+                {
+                    loseCondition = GameState.gameData.GetLoseCondition;
+                    active = true;
+                    GameState.Instance.StartCoroutine(CheckConditions());
+                }
+                else
+                {
+                    Debug.Log("Problem with GameData");
+                }
+            }
+            else
+            {
+                Debug.Log("Problem with GameState.Instance");
             }
 
             SetActiveGameActors();
@@ -97,6 +114,7 @@ namespace Arkanoid
             {
                 yield return waitbrforecheck;
                 //
+                //Debug.Log(CheckWinConditions());
                 switch (CheckWinConditions()) 
                 {
                     case GameStatus.GS_LOSE:
@@ -117,11 +135,15 @@ namespace Arkanoid
         public GameStatus CheckWinConditions()
         {
             // update value
-            projectileLink = Projectile.Instance.gameObject;
+            if (Projectile.Instance)
+                projectileLink = Projectile.Instance.gameObject;
+            else
+                projectileLink = null;
             enemiesAmount = EnemyManager.Instance.GetActiveEnemiesAmount();
             platformHealh = Platform.Instance.GetPlatformSettings.Health;
+           
             // SessionCondition from GameData
-            return SessionCondition.CheckWinConditions(projectileLink, enemiesAmount, platformHealh);
+            return loseCondition.CheckConditions(projectileLink, enemiesAmount, platformHealh);
         }
 
         /** */
@@ -135,72 +157,114 @@ namespace Arkanoid
     /** */
     public class InPauseState : InBaseGameState
     {
-        public InPauseState(IGameState prev) : base(prev)  { StateName = "InPauseState"; }
+        public InPauseState(IGameState prev) : base(prev)  {  }
+        protected override void SetStateName() { StateName = "InPauseState"; }
     }
 
     /** */
     public class InReturnToMenuState : InBaseGameState
     {
-        public InReturnToMenuState(IGameState prev) : base(prev) { StateName = "InReturnToMenuState"; }
+        public InReturnToMenuState(IGameState prev) : base(prev) {  }
+        protected override void SetStateName() { StateName = "InReturnToMenuState"; }
     }
 
     /** */
     public class InWaitState : InBaseGameState
     {
-        public InWaitState(IGameState prev) : base(prev) { StateName = "InWaitState"; }
+        public InWaitState(IGameState prev) : base(prev) { }
+        protected override void SetStateName() { StateName = "InWaitState"; }
     }
 
     /** */
     public class InWinState : InBaseGameState
     {
-        public InWinState(IGameState prev) : base(prev)  { StateName = "InWinState"; }
+        public InWinState(IGameState prev) : base(prev)  {  }
+        protected override void SetStateName() { StateName = "InWinState"; }
+    }
+
+    /** */
+    public class InRestartLevelState : InBaseGameState
+    {
+        private int status = -1;
+
+        public InRestartLevelState(IGameState prev) : base(prev) {
+
+            Level.Instance.RestartLastLevel();
+            Platform.Instance.GoToResetState();
+            SetActiveGameActors();
+            status = 0;
+        }
+        protected override void SetStateName() { StateName = "InRestartLevelState"; }
+
+        public override void Update()
+        {
+            // should wait for a while when the constructor work wiil be done
+            if (status > -1)
+            {
+                if (status == 0)
+                    GameState.Instance.GoToPlayState();
+                status = -1;
+            }
+        }
     }
 
     /** */
     public class InLoseState : InBaseGameState
     {
-        public InLoseState(IGameState prev) : base(prev) { StateName = "InLoseState"; }
+        public InLoseState(IGameState prev) : base(prev) {  }
+        protected override void SetStateName() { StateName = "InLoseState"; }
     }
 
     /** */
     public class InGenerateLevelState : InBaseGameState
     {
-        private bool isDone = false;
+        private int status = -1;
 
         public InGenerateLevelState(IGameState prev) : base(prev)
         {
-            StateName = "InGenerateLevelState";
             // trying to generate level and waiting of reaction from user
-            isDone = TryToGenerateLevel();
+            status = TryToGenerateLevel();
+        }
+        protected override void SetStateName() { StateName = "InGenerateLevelState"; }
+
+        /** Go to waiting state for if success*/
+        private void OnLevelGeneratedSuccess()
+        {
+            GameState.Instance.GoToWaitState();
         }
 
-        /** Go to waiting state for */
-        private void OnLevelGenerated()
+        /** Go to waiting state for if fail*/
+        private void OnLevelGeneratedFail()
         {
             GameState.Instance.GoToWaitState();
         }
 
         public override void Update() {
             // should wait for a while when the constructor work wiil be done
-            if (isDone) {
-                isDone = false;
-                OnLevelGenerated();
+            if (status > -1) {
+                if (status == 1)
+                    OnLevelGeneratedSuccess();
+                else if (status == 0)
+                    OnLevelGeneratedFail();
+                status = -1;
             }   
         }
 
+
         /** */
-        private bool TryToGenerateLevel()
+        private int TryToGenerateLevel()
         {
-            bool succsess = false;
+            int success = -1;
             try
             {
                 Level.Instance.GenerateLevel();
-                succsess = true;
+                success = 1;
             } catch {
-
+                Debug.Log("generate level state fail!");
+                success = 0;
             }
 
-            return succsess;
+            return success;
         }
     }
 
@@ -217,8 +281,8 @@ namespace Arkanoid
         private static GameState _instance;
         public  static GameState Instance { get { return _instance; } private set { _instance = value; } }
         // main game state switcher
-        private static IGameState state;
-        public static IGameState State { get { return state; } private set { state = value;
+        private /*static*/ IGameState state;
+        public /*static*/ IGameState  State { get { return state; } private set { state = value;
                // Debug.Log("Set: " + value);
             } }
 
@@ -268,10 +332,13 @@ namespace Arkanoid
         /** 
          * STATE switches
          * */
+        public void GoToRestartLevelState()
+        {
+            state = new InRestartLevelState(state);
+        }
 
         public void GoToGenerateLevelState()
         {
-            //lock(State) { State = new InGenerateLevelState(state); }
             state = new InGenerateLevelState(state);
         }
 
@@ -304,7 +371,6 @@ namespace Arkanoid
         {
             state = new InLoseState(state);
         }
-
 
         void OnDisable()
         {

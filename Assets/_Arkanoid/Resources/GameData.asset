@@ -17,15 +17,23 @@ MonoBehaviour:
     columns: 5
     movementShiftLimits: {x: 0, y: 0}
     cell: {x: 1.5, y: 1.5}
+    useAbilitySpawner: 0
   - enemyAmount: 15
     rows: 3
     columns: 5
     movementShiftLimits: {x: 0, y: 0}
     cell: {x: 1.2, y: 1.2}
+    useAbilitySpawner: 0
+  - enemyAmount: 8
+    rows: 2
+    columns: 4
+    movementShiftLimits: {x: 0, y: 0}
+    cell: {x: 1.6, y: 1.6}
+    useAbilitySpawner: 0
   gameSettings:
     maxSavedSessions: 0
-  LoseCondition:
-    loseIfPlatfromHealthIsZero: 0
-    loseIfProjectileIsDestroed: 0
-    loseIfTimeOut: 0
+  loseCondition:
+    ifPlatfromHealthIsZero: 0
+    ifProjectileIsDestroed: 1
+    ifTimeOut: 0
   sessionsResults: []

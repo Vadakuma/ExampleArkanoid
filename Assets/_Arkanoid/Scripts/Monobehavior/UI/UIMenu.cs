@@ -2,82 +2,126 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
 
 namespace Arkanoid
 {
-    [RequireComponent(typeof(CanvasGroup))]
-    [RequireComponent(typeof(CanvasGroupController))]
     public class UIMenu : MonoBehaviour
     {
-        [SerializeField, Tooltip("Looking to the game state names in GameState.cs")]
+        [SerializeField, Tooltip("Looking the string key to the game state names in GameState.cs and Listeners in InGameUI")]
         protected string menuName;
-
-        //private static UIMenu _instance;
-        //public  static UIMenu Instance { get { return _instance; } private set { _instance = value; } }
-
         // UICanvasContainer allow to easier make fadeInOut staff
-        private UICanvasContainer uICanvasContainer = new UICanvasContainer();
+        protected UICanvasContainer uICanvasContainer;
+
+        public static bool isSetListeners = false;
+
 
         // Use this for initialization
         void Awake()
         {
-            //Instance = this;
-            uICanvasContainer.cgroup = gameObject.GetComponent<CanvasGroup>();
-            uICanvasContainer.cgcontroller = gameObject.GetComponent<CanvasGroupController>();
-            uICanvasContainer.Restart(0.0f, 1.0f, false);
+            uICanvasContainer = new UICanvasContainer(gameObject.GetComponent<CanvasGroup>(),
+               gameObject.GetComponent<CanvasGroupController>());
+
+            uICanvasContainer.Fade(0.0f, 1.0f, false);
         }
 
-
-        void Start()
-        {
+        void OnEnable()  {       }
+        void Start() {
             // set this ui menu to specials container InGameUI for controlling
             if (InGameUI.Instance)
                 InGameUI.Instance.AddMenu(menuName, uICanvasContainer);
-        }
 
+            AddListeners();
+        }
         // Update is called once per frame
         void Update() {     }
 
-        /** */
-        public void OnClosePopup(string key)
-        {
-            switch(key)
-            {
-                case "startround":
-                    break;
-                case "returntomenu":
-                    SceneLoad sceneLoad = new SceneLoad();
-                    sceneLoad.Load(0);
-                    break;
-                case "restart":
-                    break;
-                case "unpause":
-                    break;
-                case "nextround":
-                    break;
-                case "resetround":
-                    break;
-            }
 
-            uICanvasContainer.Restart(0.0f, 0.1f, false);
+        public static void AddListeners()
+        {
+            // set all listeners at once, it should work from any UIMenu 
+            if (!isSetListeners)
+            {
+                //Debug.Log("AddListeners");
+                isSetListeners = true;
+                EventManager.StartListening("returntomenu", InGameUI.Instance.GoToMainMenu);
+                EventManager.StartListening("resetround", GameState.Instance.GoToRestartLevelState);
+                EventManager.StartListening("nextround", GameState.Instance.GoToGenerateLevelState);
+                EventManager.StartListening("unpause", GameState.Instance.GoToPlayState);
+            }
         }
 
-    }
+        public static void RemoveLesteners()
+        {
+            // remove all listeners at once
+            if (isSetListeners)
+            {
+                //Debug.Log("RemoveLesteners");
+                isSetListeners = false;
+                // set all listeners at once we should work from any UIMenu 
+                EventManager.StartListening("returntomenu", InGameUI.Instance.GoToMainMenu);
+                EventManager.StartListening("resetround", GameState.Instance.GoToRestartLevelState);
+                EventManager.StartListening("nextround", GameState.Instance.GoToGenerateLevelState);
+                EventManager.StartListening("unpause", GameState.Instance.GoToPlayState);
+            }
+        }
 
+        /** call from buttons */
+        public void OnClosePopup(string key)
+        {
+            EventManager.TriggerEvent(key);
+
+            uICanvasContainer.Fade(0.0f, 0.1f, false);
+        }
+
+        void OnDisable()
+        {
+            RemoveLesteners();
+        }
+    }
 
     // UICanvasContainer allow to easier make fadeInOut staff
     [System.Serializable]
     public class UICanvasContainer
     {
         // menu canvas group
-        public CanvasGroup cgroup;
+        public CanvasGroup              cgroup;
         // special controller for alpha from canvas group
-        public CanvasGroupController cgcontroller;
+        public CanvasGroupController    cgcontroller;
 
-        public void Restart(float _alpha, float _smoothness, bool _destroy)
+        public UICanvasContainer() { }
+        public UICanvasContainer(CanvasGroup cg, CanvasGroupController cgc)
+        {
+            cgroup = cg;
+            cgcontroller = cgc;
+        }
+
+        /**
+		* _alpha - current value in alpha field
+		* _smoothness - lerp smoothnes on changing 
+		* _destroy - destroy CanvasGroupController at the end
+		*/
+        public void Fade(float _alpha, float _smoothness, bool _destroy)
         {
             if(cgcontroller != null && cgroup != null)
-             cgcontroller.Restart(cgroup, _alpha, _smoothness, _destroy);
+                cgcontroller.Fade(cgroup, _alpha, _smoothness, _destroy);
+        }
+
+
+        /** apply some canvas group params. Fields from CanvasGroup component
+         * _alpha -
+         * _blockraycasts -
+         * _interactable -
+         */
+        public void UpdateCanvasGroup(float _alpha, bool _blockraycasts, bool _interactable)
+        {
+            if (cgroup)
+            {
+                cgroup.alpha = _alpha;
+                cgroup.blocksRaycasts = _blockraycasts;
+                cgroup.interactable = _interactable;
+            }
         }
     }
 }

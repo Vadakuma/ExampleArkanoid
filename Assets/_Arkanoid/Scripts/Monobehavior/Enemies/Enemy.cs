@@ -85,7 +85,7 @@ namespace Arkanoid
         protected void ReturnToThePool()
         {
             EnemyManager.Instance.RemoveFromActive(parent);
-            Debug.Log("ReturnToThePool");
+            //Debug.Log("ReturnToThePool");
             parent.ParentPool.ReturnEnemy(parent);
             parent.ToIdleStateActivate();
         }
@@ -112,9 +112,12 @@ namespace Arkanoid
     {
         [SerializeField, Tooltip("Maximum platform health")]
         protected int   maxHealth;
+        [SerializeField, Tooltip(" ")]
+        protected int   score;
 
         public int MaxHealth { get { return maxHealth; } }
         public int Health { get;  set; }
+        public int Score { get { return score; } private set { } }
 
         public void Init()
         {
@@ -179,7 +182,7 @@ namespace Arkanoid
         /** */
         public void ToDeadStateActivate()
         {
-            Debug.Log("ToDeadStateActivate: " + gameObject.name);
+            //Debug.Log("ToDeadStateActivate: " + gameObject.name);
             state = new EnemyDeadState(this);
         }
 

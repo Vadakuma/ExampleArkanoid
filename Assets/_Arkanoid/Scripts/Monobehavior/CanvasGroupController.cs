@@ -36,11 +36,11 @@ namespace Arkanoid
 		}*/
 
         /** _cg - canvasGroup to control
-		* _alpha - current value in alpha filed
-		* _smoothness - Lerp smoothnes on changing 
+		* _alpha - current value in alpha field
+		* _smoothness - lerp smoothnes on changing 
 		* _destroy - destroy CanvasGroupController at the end
 		*/
-        public void Restart(CanvasGroup _cg, float _alpha, float _smoothness, bool _destroy)
+        public void Fade(CanvasGroup _cg, float _alpha, float _smoothness, bool _destroy)
 		{
 			needcgAlpha = _alpha;
 			canvasGroup = _cg;
@@ -65,7 +65,7 @@ namespace Arkanoid
 		* _destroy - destroy CanvasGroupController at the end
         * _restartDoneMethod - 
 		*/
-        public void Restart(CanvasGroup _cg, float _alpha, float _smoothness, bool _destroy, AlphaUpdate _restartDoneMethod)
+        public void Fade(CanvasGroup _cg, float _alpha, float _smoothness, bool _destroy, AlphaUpdate _restartDoneMethod)
         {
             needcgAlpha = _alpha;
             canvasGroup = _cg;

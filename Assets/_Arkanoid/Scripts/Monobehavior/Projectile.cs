@@ -16,18 +16,22 @@ namespace Arkanoid
         protected float speed;
         [SerializeField]
         protected float destroyTime;
+        [SerializeField, Tooltip("Not stable")]
+        protected bool  useStickToplatformEffect = false;
 
         public int      DamageAmount { get { return damage; } private set { } }
         public float    Speed { get { return speed; } private set { } }
 
         private Rigidbody   projectileRigidbody;
         private Rigidbody   playerRigidbody;
-
+        private Collider    projectileCollider;
         private Vector3     direction = Vector3.zero;
         private Vector3     lastDirection = Vector3.zero;
         private Vector3     velocity = Vector3.zero;
 
         private readonly Vector3 initdir = new Vector3(1, 1, 1);
+        private          Vector3 initpos;
+
 
         private WaitForSeconds stickingwait = new WaitForSeconds(0.05f);
 
@@ -39,6 +43,8 @@ namespace Arkanoid
         {
             Instance = this;
             projectileRigidbody = GetComponent<Rigidbody>();
+
+            initpos = transform.position;
         }
 
         // Use this for initialization
@@ -61,17 +67,24 @@ namespace Arkanoid
         // Update is called once per frame
         void Update() {     }
 
-        /** */
-        public void SetInitialPosition()
+        /** Set to initial position,reactivate components, stop moving  */
+        public void ResetProjectile()
         {
-
+            gameObject.SetActive(true);
+            transform.position = initpos;
+            if (projectileCollider)
+                projectileCollider.enabled = true;
+            StopMoving();
         }
 
         /** */
         public void StopMoving()
         {
-            lastDirection = projectileRigidbody.velocity;
-            projectileRigidbody.velocity = Vector3.zero;
+            if (projectileRigidbody != null)
+            {
+                lastDirection = projectileRigidbody.velocity;
+                projectileRigidbody.velocity = Vector3.zero;
+            }
         }
 
         /** */
@@ -86,11 +99,11 @@ namespace Arkanoid
         /** Colliding for scene object - wall or player platform*/
         void OnCollisionEnter(Collision collisionInfo)
         {
-            Debug.Log("Projectile OnCollisionEnter");
+            //Debug.Log("Projectile OnCollisionEnter");
             ContactPoint cp = collisionInfo.contacts[0];
 
             // Checking and calculate the next direction to move
-            if (collisionInfo.gameObject.CompareTag("Player"))
+            if (useStickToplatformEffect && collisionInfo.gameObject.CompareTag("Player"))
             {
                 lastDirection = projectileRigidbody.velocity;
                 if (playerRigidbody == null)
@@ -129,12 +142,20 @@ namespace Arkanoid
         /** */
         private void DestroyState()
         {
-            Collider c = gameObject.GetComponent<Collider>();
-            if (c != null)
-                c.enabled = false;
- 
+            if (projectileCollider == null)
+            {
+                Collider c = gameObject.GetComponent<Collider>();
+                if (c != null)
+                {
+                    projectileCollider = c;
+                }
+            }
+            if (projectileCollider)
+                projectileCollider.enabled = false;
+
             // initiate destroy procedure
-            Destroy(gameObject, destroyTime);
+            //Destroy(gameObject, destroyTime);
+            gameObject.SetActive(false);
         }
 
         /* Spawn some destroy effects **/

@@ -41,6 +41,7 @@ namespace Arkanoid
         public virtual void Init(Platform platform)
         {
             parent = platform;
+            platformSettings = platform.GetPlatformSettings;
             inputcontrol = new InputControl();
         }
 
@@ -93,7 +94,7 @@ namespace Arkanoid
         {
             curpos = platform.transform.position; // set initial position
             pos = platform.transform.position; // set initial position
-            platformSettings = platform.GetPlatformSettings; 
+
         }
 
         /** */
@@ -158,6 +159,24 @@ namespace Arkanoid
         public new void MoveTo(Platform platform, int side) { }
     }
 
+    /*
+     * Stop moving, get damage and ability restore data and postion
+     */
+    public class ResetState : InitialState
+    {
+        public ResetState(Platform platform) : base(platform) {
+            platform.transform.position = Platform.Initpos;
+            platformSettings.Health -= platformSettings.MaxHealth;
+        }
+
+        public new void Init(Platform platform) { }
+        public new void Update(Platform platform) {
+            if (parent)
+                parent.GoToActiveState();
+        }
+        public new void MoveTo(Platform platform, int side) { }
+    }
+
     /***************************************************************************************************
      * PLATFORM SETTINGS
      * *************************************************************************************************/
@@ -209,10 +228,14 @@ namespace Arkanoid
         //Base settings about movement and health
         public PlatformSettings     GetPlatformSettings { get { return platformSettings; } private set { } }
 
+        // initial position at start scene
+        public static Vector3 initpos;
+        public static Vector3 Initpos { get { return initpos; } private set { initpos = value; } }
 
         void Awake()
         {
             Instance = this;
+            initpos = transform.position;
         }
 
         // Use this for initialization
@@ -245,6 +268,11 @@ namespace Arkanoid
             state = new ActionState(this);
         }
 
+        public void GoToResetState()
+        {
+            state = new ResetState(this);
+        }
+
         /** moving*/
         public void MoveTo(int side)
         {
@@ -264,7 +292,6 @@ namespace Arkanoid
 
             pickup.DeActivateState();
         }
-
 
         private void OnTriggerEnter(Collider other)
         {
