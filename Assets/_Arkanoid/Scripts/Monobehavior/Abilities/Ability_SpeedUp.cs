@@ -17,31 +17,19 @@ namespace Arkanoid
     {
         [SerializeField]
         protected SpeedUpSettings abilitySettings = new SpeedUpSettings();
-        //Speed up effect
-        private float oldSpeed = 0;
-        private bool speedup = false;
 
         public override void Apply(Platform p)
         {
             ps = p.GetPlatformSettings;
             p.StartCoroutine(SpeedUpAbility());
-            //Debug.Log("Ability_SpeedUp Apply");
         }
 
         /** */
         private IEnumerator SpeedUpAbility()
         {
-            if (!speedup)
-            {
-                speedup = true;
-                oldSpeed = ps.Speed;
-                ps.Speed *= abilitySettings.speedfactor;
-                yield return new WaitForSeconds(abilitySettings.lifetime);
-                ps.Speed = oldSpeed;
-                speedup = false;
-            }
-
-            yield return null;
+            ps.SpeedUpFactor += abilitySettings.speedfactor;
+            yield return new WaitForSeconds(abilitySettings.lifetime);
+            ps.SpeedUpFactor -= abilitySettings.speedfactor;
         }
     }
 }

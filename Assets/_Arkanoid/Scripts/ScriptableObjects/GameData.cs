@@ -19,10 +19,10 @@ namespace Arkanoid
         protected GameSettings          gameSettings    = new GameSettings();
         [SerializeField]
         protected SessionCondition      loseCondition   = new SessionCondition();
-        [SerializeField]
-        protected List<PlayerData>      sessionsResults = new List<PlayerData>();
+        
 
-        protected static PlayerData        sessionPlayerData = new PlayerData();
+        // Container with results
+        public List<PlayerData> SessionsResults = new List<PlayerData>();
 
         /** Condition about win or lose stuff*/
         public SessionCondition GetLoseCondition
@@ -32,6 +32,8 @@ namespace Arkanoid
                 return loseCondition;
             }
         }
+
+        protected static PlayerData sessionPlayerData = new PlayerData();
         /** Params like a score during in the game session*/
         public static PlayerData SessionPlayerData
         {
@@ -45,12 +47,12 @@ namespace Arkanoid
         /** add score duting in the game session*/
         public static void ApplyScore(int score)
         {
-            sessionPlayerData.score += score;
+            sessionPlayerData.Score += score;
         }
 
         public static void ResetScore(int score)
         {
-            sessionPlayerData.score = 0;
+            sessionPlayerData.Score = 0;
         }
 
 
@@ -105,11 +107,22 @@ namespace Arkanoid
         public int maxSavedSessions;
     }
 
-    [System.Serializable] // memento
-    public struct PlayerData
+    [System.Serializable] 
+    public class PlayerData
     {
-        public int score;
-        public int maxRoundCounter;
+        private int score;
+        private int maxRoundCounter;
+
+        public int Score { get { return score; } set { score = value; } }
+        public int MaxRoundCounter { get { return maxRoundCounter; } set { maxRoundCounter = value; } }
+
+        public PlayerData() {      }
+
+        public PlayerData(int _score, int _rounds)
+        {
+            Score = _score;
+            MaxRoundCounter = _rounds;
+        }
     }
 
 
@@ -161,17 +174,6 @@ namespace Arkanoid
             }
 
             return result;
-        }
-    }
-
-    // save game
-    class GameHistory
-    {
-        public Stack<PlayerData> History { get; private set; }
-
-        public GameHistory()
-        {
-            History = new Stack<PlayerData>();
         }
     }
 }

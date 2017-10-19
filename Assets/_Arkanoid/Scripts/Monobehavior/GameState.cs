@@ -178,8 +178,18 @@ namespace Arkanoid
     /** */
     public class InWinState : InBaseGameState
     {
-        public InWinState(IGameState prev) : base(prev)  {  }
+        public InWinState(IGameState prev) : base(prev)  {
+            // See GameData.cs
+            GameState.gameData.SessionsResults.Add(SaveResult());
+        }
         protected override void SetStateName() { StateName = "InWinState"; }
+
+
+        protected PlayerData SaveResult()
+        {
+            return new PlayerData(GameData.SessionPlayerData.Score,
+                GameData.SessionPlayerData.MaxRoundCounter++);
+        }
     }
 
     /** */

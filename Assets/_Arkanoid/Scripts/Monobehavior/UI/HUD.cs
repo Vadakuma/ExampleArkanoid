@@ -20,7 +20,7 @@ namespace Arkanoid
         private WaitForSeconds      updatewait;
         private bool                isActive = false;
         private PlatformSettings    ps; // cash
-
+        private PlayerData          pd;
         // Use this for initialization
         void Start()
         {
@@ -28,7 +28,8 @@ namespace Arkanoid
             updatewait = new WaitForSeconds(updatenFrequency);
 
             ps = Platform.Instance.GetPlatformSettings;
-           
+            pd = GameData.SessionPlayerData;
+
             isActive = true;
             StartCoroutine(UpdateHUD());
         }
@@ -48,9 +49,9 @@ namespace Arkanoid
                 if (health)
                     health.text = ps.Health.ToString();
                 if (hightscore)
-                    hightscore.text = GameData.SessionPlayerData.score.ToString();
+                    hightscore.text = pd.Score.ToString();
                 if (roundindex)
-                    roundindex.text = GameData.SessionPlayerData.maxRoundCounter.ToString();
+                    roundindex.text = pd.MaxRoundCounter.ToString();
             }
         }
 

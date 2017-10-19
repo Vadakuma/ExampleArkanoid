@@ -50,11 +50,8 @@ namespace Arkanoid
         // Use this for initialization
         void Start()
         {
-              // found spawn point and set position
-
-
             // initial inpulse
-            //StartMoving();
+
             StopMoving();
         }
 
@@ -65,7 +62,7 @@ namespace Arkanoid
         }
 
         // Update is called once per frame
-        void Update() {     }
+        void Update() {    }
 
         /** Set to initial position,reactivate components, stop moving  */
         public void ResetProjectile()

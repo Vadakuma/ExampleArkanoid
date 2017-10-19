@@ -53,4 +53,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilitySettings:
     lifetime: 0
-    fireprojectile: {fileID: 0}
+    fireprojectile: {fileID: 1587165318555328, guid: 94ecb2d2ada25ce4585e6279b966f4ad,
+      type: 2}

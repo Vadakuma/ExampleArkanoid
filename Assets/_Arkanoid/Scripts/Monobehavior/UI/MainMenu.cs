@@ -19,6 +19,10 @@ namespace Arkanoid
         {
             uICanvasContainer = new UICanvasContainer(gameObject.GetComponent<CanvasGroup>(),
                 gameObject.GetComponent<CanvasGroupController>());
+
+            uICanvasContainer.UpdateCanvasGroup(0, true, true); // fast dark in
+            // and
+            uICanvasContainer.Fade(1, 0.05f, false); // slow dark out
         }
 
         // Update is called once per frame

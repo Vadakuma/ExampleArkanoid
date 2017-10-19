@@ -166,7 +166,7 @@ namespace Arkanoid
     {
         public ResetState(Platform platform) : base(platform) {
             platform.transform.position = Platform.Initpos;
-            platformSettings.Health -= platformSettings.MaxHealth;
+            platformSettings.Health = platformSettings.MaxHealth;
         }
 
         public new void Init(Platform platform) { }
@@ -196,8 +196,11 @@ namespace Arkanoid
         [SerializeField, Tooltip(" ")]
         protected Vector2   movementShiftLimits = new Vector2(-10, 10);
 
+
+       
+
         // max platform speed
-        public float    Speed { get { return speed; } set { speed = value; } }
+        public float    Speed { get { return speed * SpeedUpFactor; } set { speed = value; } }
         // How fast we will get zero speed
         public float    SpeedDampness { get { return speedDampness; } }
         // How fast we will get max speed after input command
@@ -205,6 +208,9 @@ namespace Arkanoid
         public Vector2  GetMovementShiftLimits { get { return movementShiftLimits; } }
         public int      Health{ get { return health; } set { health = value; } }
         public int      MaxHealth { get { return maxHealth; } }
+
+        public float   speedUpFactor = 1.0f;
+        public float    SpeedUpFactor { get { return speedUpFactor; } set { speedUpFactor = value; }  }
     }
 
 

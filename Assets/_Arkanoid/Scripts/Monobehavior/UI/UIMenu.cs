@@ -49,6 +49,7 @@ namespace Arkanoid
                 EventManager.StartListening("resetround", GameState.Instance.GoToRestartLevelState);
                 EventManager.StartListening("nextround", GameState.Instance.GoToGenerateLevelState);
                 EventManager.StartListening("unpause", GameState.Instance.GoToPlayState);
+                EventManager.StartListening("pause", GameState.Instance.GoToPauseState);
             }
         }
 
@@ -64,6 +65,7 @@ namespace Arkanoid
                 EventManager.StartListening("resetround", GameState.Instance.GoToRestartLevelState);
                 EventManager.StartListening("nextround", GameState.Instance.GoToGenerateLevelState);
                 EventManager.StartListening("unpause", GameState.Instance.GoToPlayState);
+                EventManager.StartListening("pause", GameState.Instance.GoToPauseState);
             }
         }
 

@@ -56,16 +56,20 @@ namespace Arkanoid
 
             if (bes.Health > 0)
             {
+               
                 bes.Health -= amount;
                 if (bes.Health < 1)
                 {
                     // we are dead!
                     e.ToDeadStateActivate();
+                    // Player should get some points!
+                   
                     GameData.ApplyScore(bes.Score);
                 }
             }
             else
             {
+                //Debug.Log("(Health already 0!");
                 e.ToDeadStateActivate();
             }
         }
