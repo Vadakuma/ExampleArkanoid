@@ -21,7 +21,7 @@ namespace Arkanoid
         private WaitForSeconds       spawnwait;
         private GameObject           lastspawnedpickup;
 
-        private bool isActive = false;
+        private static bool isActive = false;
 
         void Awake()
         {
@@ -63,8 +63,11 @@ namespace Arkanoid
             while (isActive)
             {
                 yield return spawnwait;
-                rand = Random.Range(0, pickups.Count);
-                SpawnPickup(pickups[rand]);
+                if (isActive)
+                {
+                    rand = Random.Range(0, pickups.Count);
+                    SpawnPickup(pickups[rand]);
+                }
             }
         }
 
