@@ -178,7 +178,7 @@ namespace Arkanoid
     {
         public InWinState(IGameState prev) : base(prev)  {
             // See GameData.cs
-            GameState.gameData.SessionsResults.Add(SaveResult());
+            GameState.gameData.AddSessionsResult(SaveResult());
         }
         protected override void SetStateName() { StateName = "InWinState"; }
 
@@ -201,6 +201,9 @@ namespace Arkanoid
             Platform.Instance.GoToResetState();
             SetActiveGameActors();
             status = 0;
+
+            // dropping previous score result
+            ResetResult();
         }
         protected override void SetStateName() { StateName = "InRestartLevelState"; }
 
@@ -213,6 +216,12 @@ namespace Arkanoid
                     GameState.Instance.GoToPlayState();
                 status = -1;
             }
+        }
+
+        // drop score about last try
+        private void ResetResult()
+        {
+            GameData.ResetScore();
         }
     }
 
@@ -238,8 +247,6 @@ namespace Arkanoid
         {
             // trying to generate level and waiting of reaction from user
             status = TryToGenerateLevel();
-            // dropping previous score result
-            ResetResult();
             // make shure that platform in the good conditions
             Platform.Instance.GoToResetState();
         }
@@ -284,19 +291,12 @@ namespace Arkanoid
 
             return success;
         }
-
-        // drop score about last try
-        private void ResetResult()
-        {
-            GameData.ResetScore();
-        }
     }
 
 
-
     /***************************************************************************************************
-     * MAIN GAME STATE MONO
-     * *************************************************************************************************/
+        * MAIN GAME STATE MONO
+        * *************************************************************************************************/
     //[System.Serializable]
     public class GameState : MonoBehaviour
     {

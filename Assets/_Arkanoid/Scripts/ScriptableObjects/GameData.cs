@@ -36,6 +36,14 @@ namespace Arkanoid
             }
         }
 
+        /** check and add*/
+        public void AddSessionsResult(PlayerData pd)
+        {
+            // 
+            SessionsResults.Add(pd);
+        }
+
+
         protected static PlayerData sessionPlayerData = new PlayerData();
         /** Params like a score during in the game session*/
         public static PlayerData SessionPlayerData

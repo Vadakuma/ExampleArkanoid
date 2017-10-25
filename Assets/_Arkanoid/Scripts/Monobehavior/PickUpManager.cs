@@ -21,7 +21,8 @@ namespace Arkanoid
         private WaitForSeconds       spawnwait;
         private GameObject           lastspawnedpickup;
 
-        private static bool isActive = false;
+        private static Coroutine Spawn;
+
 
         void Awake()
         {
@@ -36,8 +37,10 @@ namespace Arkanoid
             {
                 if (pickups.Count > 0)
                 {
-                    isActive = true;
-                    StartCoroutine(GeneratePickUps());
+                    if (Spawn == null)
+                        Spawn = StartCoroutine(GeneratePickUps());
+                    else
+                        UnPauseSpawn();
                 }
                 else
                 {
@@ -47,10 +50,7 @@ namespace Arkanoid
         }
 
         // Use this for initialization
-        void Start()
-        {
-
-        }
+        void Start(){ }
 
         // Update is called once per frame
         void Update() { }
@@ -60,14 +60,11 @@ namespace Arkanoid
         private IEnumerator GeneratePickUps()
         {
             int rand;
-            while (isActive)
+            while (true)
             {
                 yield return spawnwait;
-                if (isActive)
-                {
-                    rand = Random.Range(0, pickups.Count);
-                    SpawnPickup(pickups[rand]);
-                }
+                rand = Random.Range(0, pickups.Count);
+                SpawnPickup(rand);
             }
         }
 
@@ -75,19 +72,21 @@ namespace Arkanoid
         /** */
         public void UnPauseSpawn()
         {
-            isActive = true;
+            PauseSpawn(); // stop at first
+            Spawn = StartCoroutine(GeneratePickUps());
         }
 
         /** */
         public void PauseSpawn()
         {
-            isActive = false;
+            if (Spawn != null)
+                StopCoroutine(Spawn);
         }
 
         /** */
-        private void SpawnPickup(GameObject pickup)
+        private void SpawnPickup(int rand)
         {
-            lastspawnedpickup = Instantiate(pickup);
+            lastspawnedpickup = Instantiate(pickups[rand]);
             // setup ability container
             Pickup pu = lastspawnedpickup.GetComponent<Pickup>();
             if (pu)

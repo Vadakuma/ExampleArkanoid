@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Name: GameData
   m_EditorClassIdentifier: 
   levelSettings:
-  - enemyAmount: 6
-    rows: 3
-    columns: 2
+  - enemyAmount: 8
+    rows: 2
+    columns: 4
     cell: {x: 1.5, y: 1.5}
   - enemyAmount: 12
     rows: 3
