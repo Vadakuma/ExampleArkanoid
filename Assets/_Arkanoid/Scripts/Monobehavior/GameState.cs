@@ -202,7 +202,7 @@ namespace Arkanoid
             SetActiveGameActors();
             status = 0;
 
-            // dropping previous score result
+            // dropping score result in the last session 
             ResetResult();
         }
         protected override void SetStateName() { StateName = "InRestartLevelState"; }
@@ -231,7 +231,7 @@ namespace Arkanoid
         public InLoseState(IGameState prev) : base(prev) { ResetResult(); }
         protected override void SetStateName() { StateName = "InLoseState"; }
 
-        // drop score about last try
+        // drop all score
         private void ResetResult()
         {
             GameData.ResetScore();
@@ -249,6 +249,8 @@ namespace Arkanoid
             status = TryToGenerateLevel();
             // make shure that platform in the good conditions
             Platform.Instance.GoToResetState();
+            // drop score about last try
+            ResetResult();
         }
         protected override void SetStateName() { StateName = "InGenerateLevelState"; }
 
@@ -291,6 +293,12 @@ namespace Arkanoid
 
             return success;
         }
+
+        // drop score about last try
+        private void ResetResult()
+        {
+            GameData.ResetScore();
+        }
     }
 
 
@@ -330,9 +338,9 @@ namespace Arkanoid
             if (scene.buildIndex != 0) // check that it is right Game level by index and generate scene stuff
                 GoToGenerateLevelState();
 
-            // reset data from previous session
-            GameData.ResetScore();
-            GameData.ResetRoundCounter();
+            // reset all data from previous session
+            if(gameData != null)
+                gameData.ResetAllSavedScoreData();
         }
 
         // Use this for initialization

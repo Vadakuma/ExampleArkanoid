@@ -62,11 +62,11 @@ namespace Arkanoid
                 //Debug.Log("RemoveLesteners");
                 isSetListeners = false;
                 // set all listeners at once we should work from any UIMenu 
-                EventManager.StartListening("returntomenu", InGameUI.Instance.GoToMainMenu);
-                EventManager.StartListening("resetround", GameState.Instance.GoToRestartLevelState);
-                EventManager.StartListening("nextround", GameState.Instance.GoToGenerateLevelState);
-                EventManager.StartListening("unpause", GameState.Instance.GoToPlayState);
-                EventManager.StartListening("pause", GameState.Instance.GoToPauseState);
+                EventManager.StopListening("returntomenu", InGameUI.Instance.GoToMainMenu);
+                EventManager.StopListening("resetround", GameState.Instance.GoToRestartLevelState);
+                EventManager.StopListening("nextround", GameState.Instance.GoToGenerateLevelState);
+                EventManager.StopListening("unpause", GameState.Instance.GoToPlayState);
+                EventManager.StopListening("pause", GameState.Instance.GoToPauseState);
             }
         }
 

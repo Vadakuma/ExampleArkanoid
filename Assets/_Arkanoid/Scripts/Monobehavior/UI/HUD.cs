@@ -9,7 +9,7 @@ namespace Arkanoid
     public class HUD : MonoBehaviour
     {
         [SerializeField, Tooltip("Rand from 0 to value")]
-        protected float     updatenFrequency = 0.1f;
+        protected float     updatenFrequency = 0.5f;
         [SerializeField]
         protected Text      hightscore;
         [SerializeField]
@@ -21,6 +21,7 @@ namespace Arkanoid
         private bool                isActive = false;
         private PlatformSettings    ps; // cash
         private PlayerData          pd;
+
         // Use this for initialization
         void Start()
         {
@@ -40,6 +41,7 @@ namespace Arkanoid
         /** */
         private IEnumerator UpdateHUD()
         {
+            int sc = 0; // find last total score result
             while (isActive)
             {
                 yield return updatewait;
@@ -47,7 +49,13 @@ namespace Arkanoid
                 if (health)
                     health.text = ps.Health.ToString();
                 if (hightscore)
-                    hightscore.text = pd.Score.ToString();
+                {
+                    if (GameState.gameData != null && GameState.gameData.SessionsResults.Count > 0)
+                        sc = GameState.gameData.SessionsResults[GameState.gameData.SessionsResults.Count - 1].TotalScore;
+
+                    hightscore.text = (pd.Score + sc).ToString();
+                }
+                    
                 if (roundindex)
                     roundindex.text = (pd.MaxRoundCounter+1).ToString();
             }

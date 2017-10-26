@@ -19,13 +19,14 @@ namespace Arkanoid
         public static GameData Instance { get { return _instance; } private set { _instance = value; } }
 
         [SerializeField]
-        protected List<LevelSettings>   levelSettings   = new List<LevelSettings>();
+        protected List<LevelSettings>       levelSettings   = new List<LevelSettings>();
         [SerializeField]
-        protected GameSettings          gameSettings    = new GameSettings();
+        protected GameSettings              gameSettings    = new GameSettings();
         [SerializeField]
-        protected SessionCondition      loseCondition   = new SessionCondition();
+        protected SessionCondition          loseCondition   = new SessionCondition(); 
         // Container with results just info container
-        public List<PlayerData>         SessionsResults = new List<PlayerData>();
+        public List<PlayerData>             SessionsResults = new List<PlayerData>();
+
 
         /** Condition about win or lose stuff*/
         public SessionCondition GetLoseCondition
@@ -39,10 +40,14 @@ namespace Arkanoid
         /** check and add*/
         public void AddSessionsResult(PlayerData pd)
         {
-            // 
+            // accumulate total score
+            if(SessionsResults.Count > 0)
+                pd.TotalScore += SessionsResults[SessionsResults.Count - 1].TotalScore + pd.Score;
+            else
+                pd.TotalScore = pd.Score;
+
             SessionsResults.Add(pd);
         }
-
 
         protected static PlayerData sessionPlayerData = new PlayerData();
         /** Params like a score during in the game session*/
@@ -60,16 +65,24 @@ namespace Arkanoid
         {
             sessionPlayerData.Score += score;
         }
-
+        /** reset session score */
         public static void ResetScore()
         {
+            // set in score last win result
             sessionPlayerData.Score = 0;
         }
+
         public static void ResetRoundCounter()
         {
             sessionPlayerData.MaxRoundCounter = 0;
         }
 
+        /** reset all previus scores, before start a new game */
+        public void ResetAllSavedScoreData()
+        {
+            SessionsResults = new List<PlayerData>();
+            ResetScore();
+        }
 
         /** for level generator*/
         public LevelSettings GetRandomLevelSettings {
@@ -128,11 +141,15 @@ namespace Arkanoid
     public class PlayerData
     {
         [SerializeField]
-        protected int score;
+        protected int totalScore;
         [SerializeField]
         protected int maxRoundCounter;
 
-        public int Score { get { return score; } set { score = value; } }
+        private int sessionScore;
+
+
+        public int TotalScore { get { return totalScore; } set { totalScore = value; } }
+        public int Score { get { return sessionScore; } set { sessionScore = value; } }
         public int MaxRoundCounter { get { return maxRoundCounter; } set { maxRoundCounter = value; } }
 
         public PlayerData() {      }
