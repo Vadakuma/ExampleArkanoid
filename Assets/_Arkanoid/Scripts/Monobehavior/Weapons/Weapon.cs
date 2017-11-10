@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/** Weapon is dummy for this project
+/** Example. Weapon is dummy for this project
  * */
 namespace Arkanoid
 {
@@ -30,20 +30,6 @@ namespace Arkanoid
 
         private WeaponSettings weaponSettings;
         public WeaponSettings GetWeaponSettings { get { return weaponSettings; } private set { weaponSettings = value; } }
-
-
-        // 
-        // Use this for initialization
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
 
         /** */
         public void Fire()

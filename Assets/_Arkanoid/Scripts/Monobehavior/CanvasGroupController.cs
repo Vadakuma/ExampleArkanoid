@@ -22,11 +22,6 @@ namespace Arkanoid
         private AlphaUpdate RestartDoneMethod = () => { };
 
 
-        // Use this for initialization
-        void Start () {
-			
-		}
-
         /** _cg - canvasGroup to control
 		* _alpha - current value in alpha field
 		* _smoothness - lerp smoothnes on changing 

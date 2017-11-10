@@ -49,12 +49,6 @@ namespace Arkanoid
             }
         }
 
-        // Use this for initialization
-        void Start(){ }
-
-        // Update is called once per frame
-        void Update() { }
-
         /** Pickups generator
         **/
         private IEnumerator GeneratePickUps()
@@ -92,7 +86,7 @@ namespace Arkanoid
             if (pu)
             {
                 // set ability depends on level settings
-                pu.SetAbility(Level.Instance.GetRandAbility());
+                pu.SetAbility(Level.Instance.GetRandLevelAbility());
             }
         }
     }

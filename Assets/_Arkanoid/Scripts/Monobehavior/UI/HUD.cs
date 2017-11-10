@@ -32,11 +32,10 @@ namespace Arkanoid
             pd = GameData.SessionPlayerData;
 
             isActive = true;
+
+     
             StartCoroutine(UpdateHUD());
         }
-
-        // Update is called once per frame
-        void Update(){ }
 
         /** */
         private IEnumerator UpdateHUD()
@@ -48,6 +47,7 @@ namespace Arkanoid
                 // update hud
                 if (health)
                     health.text = ps.Health.ToString();
+
                 if (hightscore)
                 {
                     if (GameState.gameData != null && GameState.gameData.SessionsResults.Count > 0)

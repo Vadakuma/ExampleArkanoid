@@ -9,7 +9,6 @@ namespace Arkanoid
     [RequireComponent(typeof(CanvasGroupController))]
     public class MainMenu : MonoBehaviour
     {
-
         private SceneLoad sceneLoad = new SceneLoad();
         // UICanvasContainer allow to easier make fadeInOut staff
         private UICanvasContainer uICanvasContainer = new UICanvasContainer();
@@ -24,9 +23,6 @@ namespace Arkanoid
             // and
             uICanvasContainer.Fade(1, 0.05f, false); // slow dark out
         }
-
-        // Update is called once per frame
-        void Update()   {        }
 
         /** */
         public void GoToScene(int index)
@@ -52,7 +48,7 @@ namespace Arkanoid
         /** */
         private void OnFadeQuit()
         {
-            Application.Quit(); ;
+            Application.Quit();
         }
     }
 }

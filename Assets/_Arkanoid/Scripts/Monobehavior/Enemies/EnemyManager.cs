@@ -31,10 +31,6 @@ namespace Arkanoid
             enemyPool.RandFillPool(10, enemies, enemyParentObject); // size from level settings
         }
 
-        // Use this for initialization
-        void Start() {   }
-
-
         public int GetActiveEnemiesAmount()
         {
             return activeEnemy.Count;
@@ -117,12 +113,6 @@ namespace Arkanoid
         {
             e.transform.localPosition = pos;
             return e;
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
         }
     }
 }

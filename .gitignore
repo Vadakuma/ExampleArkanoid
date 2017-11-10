@@ -1,10 +1,12 @@
-/*.csproj
-/*.sln
-/*.userprefs
-/obj
-/Library/*.log
-/Assets/*.meta
-*.meta
-/Temp
 /Out
-/.vs/TaskArkanoid_U2017.2/v15/sqlite3/storage.ide
+
+# Ignore Unity artifacts
+/Library
+/Temp
+/obj
+/.vs
+*.csproj
+*.pidb
+*.sln
+*.userprefs
+*.meta

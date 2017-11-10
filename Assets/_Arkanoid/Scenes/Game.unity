@@ -475,8 +475,8 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 109020059}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 568, y: 319.5, z: 0}
-  m_LocalScale: {x: 1.2297561, y: 1.2297561, z: 1.2297561}
+  m_LocalPosition: {x: 511, y: 319.5, z: 0}
+  m_LocalScale: {x: 1.1664208, y: 1.1664208, z: 1.1664208}
   m_Children:
   - {fileID: 1595388579}
   - {fileID: 17356875}
@@ -567,7 +567,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1297731611}
         m_MethodName: OnClosePopup
-        m_Mode: 5
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -689,11 +689,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1037911056}
         m_MethodName: OnClosePopup
-        m_Mode: 5
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: unpause
           m_BoolArgument: 0
@@ -1095,7 +1095,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 443469064}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -87.71, y: 229.10762, z: 0}
+  m_LocalPosition: {x: -87.71, y: 243.21486, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 255601018}
@@ -1224,13 +1224,13 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1297731611}
         m_MethodName: OnClosePopup
-        m_Mode: 5
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 3
           m_FloatArgument: 0
-          m_StringArgument: unpause
+          m_StringArgument: 3
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -1813,11 +1813,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 915331183}
         m_MethodName: OnClosePopup
-        m_Mode: 5
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: resetround
           m_BoolArgument: 0
@@ -1961,7 +1961,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 915331177}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70202e47405089047b7011454ef80529, type: 3}
+  m_Script: {fileID: 11500000, guid: c3c27179a06cc054d9fe9a4fde0fa628, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   menuName: InLoseState
@@ -2043,7 +2043,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 927002179}
         m_MethodName: OnClosePopup
-        m_Mode: 5
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2191,7 +2191,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 927002173}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aea8596ad2171b248a4f2ed076113950, type: 3}
+  m_Script: {fileID: 11500000, guid: cf75c2df152b3e345a9827b5b0d0ca2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   menuName: InWinState
@@ -2273,7 +2273,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1037911056}
         m_MethodName: OnClosePopup
-        m_Mode: 5
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2572,7 +2572,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1037911050}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c61669c8264ea5f489862e7e505ad287, type: 3}
+  m_Script: {fileID: 11500000, guid: 0ffaef1e0f7c13146948ff4290576a16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   menuName: InWaitState
@@ -2806,8 +2806,8 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1256830040}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 568, y: 319.5, z: 0}
-  m_LocalScale: {x: 1.2297561, y: 1.2297561, z: 1.2297561}
+  m_LocalPosition: {x: 511, y: 319.5, z: 0}
+  m_LocalScale: {x: 1.1664208, y: 1.1664208, z: 1.1664208}
   m_Children:
   - {fileID: 1265122254}
   m_Father: {fileID: 0}
@@ -3111,7 +3111,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1297731605}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c83fae3966f0eb4f97e0f3f7f1f5cc1, type: 3}
+  m_Script: {fileID: 11500000, guid: 05d2840763baa124b80611d79416dbff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   menuName: InPauseState
@@ -3355,11 +3355,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1297731611}
         m_MethodName: OnClosePopup
-        m_Mode: 5
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: resetround
           m_BoolArgument: 0
@@ -3637,7 +3637,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1595388578}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -202.6, y: 220.30762, z: 0}
+  m_LocalPosition: {x: -202.6, y: 234.41486, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 525265143}
@@ -3887,7 +3887,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 915331183}
         m_MethodName: OnClosePopup
-        m_Mode: 5
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4009,11 +4009,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 927002179}
         m_MethodName: OnClosePopup
-        m_Mode: 5
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: nextround
           m_BoolArgument: 0
@@ -4077,7 +4077,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1816373220}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 42.775, y: 229.13261, z: 0}
+  m_LocalPosition: {x: 42.775, y: 243.23985, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 834502247}
@@ -4152,7 +4152,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1845298468}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 181.54, y: 229.08264, z: 0}
+  m_LocalPosition: {x: 181.54, y: 243.18988, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1509039378}
@@ -4365,7 +4365,7 @@ GameObject:
   - component: {fileID: 1890896646}
   - component: {fileID: 1890896645}
   m_Layer: 5
-  m_Name: InGameUI
+  m_Name: GUIManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4397,7 +4397,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1890896643}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86f6d156f32401940a4fca1cb230a2ac, type: 3}
+  m_Script: {fileID: 11500000, guid: 1ad866e242da08d4984405aa2d73bcb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1890896646

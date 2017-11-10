@@ -55,7 +55,6 @@ namespace Arkanoid
             StopMoving();
         }
 
-
         void FixedUpdate()
         {
             direction = projectileRigidbody.velocity;
@@ -69,6 +68,7 @@ namespace Arkanoid
         {
             gameObject.SetActive(true);
             transform.position = initpos;
+            lastDirection = initdir;
             if (projectileCollider)
                 projectileCollider.enabled = true;
             StopMoving();

@@ -30,15 +30,15 @@ namespace Arkanoid
                 prev.Disable();
             }
 
-            if (InGameUI.Instance)
-                InGameUI.Instance.SpawnPopup(StateName);
+            if (GUIManager.Instance)
+                GUIManager.Instance.SpawnMenu(StateName);
 
             SetDeActiveGameActors();
         }
         public virtual void Disable()
         {
-            if (InGameUI.Instance)
-                InGameUI.Instance.ClosePopup(StateName);
+            if (GUIManager.Instance)
+                GUIManager.Instance.CloseMenu(StateName);
         }
 
         public virtual void Update() { }
@@ -343,21 +343,9 @@ namespace Arkanoid
                 gameData.ResetAllSavedScoreData();
         }
 
-        // Use this for initialization
-        void Start() {
-
-        }
-
         // Update is called once per frame
         void Update()  {
             state.Update();
-
-            /*if (Input.GetKeyDown(KeyCode.Space))
-                GoToWaitState();
-            if (Input.GetKeyDown(KeyCode.P))
-                GoToPlayState();
-            if (Input.GetKeyDown(KeyCode.S))
-                GoToPauseState();*/
         }
 
 

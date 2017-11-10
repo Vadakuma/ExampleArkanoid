@@ -7,7 +7,7 @@ namespace Arkanoid
 {
     public class EventManager : MonoBehaviour
     {
-        private Dictionary<string, UnityEvent> eventDictionary;
+        private Dictionary<int, UnityEvent> eventDictionary;
 
         private static EventManager eventManager;
 
@@ -38,12 +38,12 @@ namespace Arkanoid
         {
             if (eventDictionary == null)
             {
-                eventDictionary = new Dictionary<string, UnityEvent>();
+                eventDictionary = new Dictionary<int, UnityEvent>();
             }
         }
 
         /** */
-        public static void StartListening(string eventName, UnityAction listener)
+        public static void StartListening(int eventName, UnityAction listener)
         {
             if (instance == null)
                 return;
@@ -62,7 +62,7 @@ namespace Arkanoid
         }
 
         /** */
-        public static void StopListening(string eventName, UnityAction listener)
+        public static void StopListening(int eventName, UnityAction listener)
         {
             if (eventManager == null) return;
             UnityEvent thisEvent = null;
@@ -73,7 +73,7 @@ namespace Arkanoid
         }
 
         /** */
-        public static void TriggerEvent(string eventName)
+        public static void TriggerEvent(int eventName)
         {
             UnityEvent thisEvent = null;
             if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))

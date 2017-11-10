@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Arkanoid
 {
-    /** 
-     * 
+    /** Reset and Generate new levels
+
      * */
     public class Level : MonoBehaviour
     {
-        [SerializeField]
+        [SerializeField, Tooltip("Set level ball prefab")]
         protected GameObject            ball;
         [SerializeField]
         protected List<Ability>         abilities = new List<Ability>();
@@ -28,9 +28,6 @@ namespace Arkanoid
         {
             Instance = this;
         }
-
-        // Use this for initialization
-        void Start() {   }
 
 
         public void GenerateLevel()
@@ -54,7 +51,6 @@ namespace Arkanoid
 
             // reset settings in Ball or spawn a new one
             SpawnBall();
-            
         }
 
         /** */
@@ -75,18 +71,19 @@ namespace Arkanoid
             }
         }
 
-        // Update is called once per frame
-        void Update() {  }
-
-
         /** */
-        public Ability GetRandAbility()
-        { 
+        public  Ability GetRandLevelAbility()
+        {
             int rand;
             rand = Random.Range(0, abilities.Count);
             return abilities[rand];
         }
     }
+
+
+
+
+
 
 
     public interface ILevelGenerator
