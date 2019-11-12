@@ -1,162 +1,24 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Arkanoid
+namespace Arkanoid.Enemies
 {
-    /***************************************************************************************************
-     * Enemy STATES
-     * *************************************************************************************************/
-    public interface IEnemyState
+    public enum EnemyType
     {
-        void Update();
-        void AddDamage(Enemy e, int amount);
-    }
+        Simple = 0,
+        Armor = 1,
+        Kamikasze = 2 
+    };
 
-    [System.Serializable]
-    public abstract class EnemyBaseState : IEnemyState
+    public class Enemy : MonoBehaviour, IDisposable
     {
-        protected Enemy             parent;
-        protected BaseEnemySettings bes;
+        // set from inspector
+        public EnemyType _enemyType;
+        public EnemyType EnemyType { get { return _enemyType; }  protected set { _enemyType = value; } }
 
-        public EnemyBaseState(Enemy e)
-        {
-            SetSettings(e);
-        }
-
-        public virtual void Update() { }
-        public virtual void AddDamage(Enemy e, int amount) { }
-
-        /** set and save general links and settings*/
-        protected void SetSettings(Enemy e)
-        {
-            parent = e;
-            if (parent)
-            {
-                bes = parent.GetEnemySettings;
-                bes.Reset();
-            }
-        }
-    }
-
-    /** Main active life state*/
-    [System.Serializable]
-    public class EnemyActiveState : EnemyBaseState
-    {
-        public EnemyActiveState(Enemy e) :base(e)
-        {
-            ActivateEffects();
-        }
-        public override void Update() { }
-        public override void AddDamage(Enemy e, int amount) {
-            if (e == null) {
-                Debug.Log("Enemy link is null");
-                return;
-            }
-
-            if (bes.Health > 0)
-            {
-               
-                bes.Health -= amount;
-                if (bes.Health < 1)
-                {
-                    // we are dead!
-                    e.ToDeadStateActivate();
-                    // Player should get some points!
-                    GameData.ApplyScore(bes.Score);
-                }
-            }
-            else
-            {
-                //Debug.Log("(Health already 0!");
-                e.ToDeadStateActivate();
-            }
-        }
-
-        /** */
-        protected void ActivateEffects() {   }
-    }
-
-    /** Death stuff state*/
-    [System.Serializable]
-    public class EnemyDeadState : EnemyBaseState
-    {
-        public EnemyDeadState(Enemy e) : base(e)
-        {
-            DeadEffects();
-            ReturnToThePool();
-        }
-        public override void Update() {  }
-        public override void AddDamage(Enemy e, int amount) { }
-
-        /** */
-        protected void DeadEffects() {       }
-
-        /** */
-        protected void ReturnToThePool()
-        {
-            EnemyManager.Instance.RemoveFromActive(parent);
-            parent.ParentPool.ReturnEnemy(parent);
-            parent.ToIdleStateActivate();
-        }
-    }
-
-
-    /** Idle stuff state*/
-    [System.Serializable]
-    public class EnemyIdleState : EnemyBaseState
-    {
-        public EnemyIdleState(Enemy e) : base(e) {    }
-        public override void Update() { }
-        public override void AddDamage(Enemy e, int amount) { }
-    }
-
-    /***************************************************************************************************
-    * Enemy SETTINGS
-    * *************************************************************************************************/
-
-    public interface IEnemySettings
-    {
-        void Reset();
-    }
-
-    [System.Serializable]
-    public class BaseEnemySettings : IEnemySettings
-    {
-        [SerializeField, Tooltip("Maximum platform health")]
-        protected int   maxHealth;
-        [SerializeField, Tooltip(" ")]
-        protected int   score;
-        [SerializeField, Tooltip(" ")]
-        protected Weapon weapon;
-        public int MaxHealth { get { return maxHealth; } }
-        public int Health { get;  set; }
-        public int Score { get { return score; } private set { } }
-
-        // Enemy weapon for some attack actions ()
-       
-        public Weapon GetWeapon { get { return weapon; } }
-
-        //TODO: Pawn(for body control), AI, ... 
-
-        private IEnemySettings specialEnemySettings;
-        public IEnemySettings GetSpecialEnemySettings { get { return specialEnemySettings; } set { specialEnemySettings = value; } }
-
-        public void Reset()
-        {
-            Health = MaxHealth;
-
-            if(specialEnemySettings != null)
-                specialEnemySettings.Reset();
-        }
-    }
-
-    /***************************************************************************************************
-        * Enemy MONO 
-        * *************************************************************************************************/
-    public class Enemy : MonoBehaviour
-    {
         [SerializeField]
         protected BaseEnemySettings enemySettings = new BaseEnemySettings();
         //Base settings about movement and health
@@ -165,20 +27,18 @@ namespace Arkanoid
         protected   IEnemyState state;
         public      IEnemyState State { get { return state; } set { state = value; } }
 
-
         protected   EnemyPool parentpool;
         public      EnemyPool ParentPool { get { return parentpool; } set { parentpool = value; } }
-        
-       
+
 
         // Use this for initialization
-        void Start()
+        private void Start()
         {
             State = new EnemyActiveState(this);
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
             state.Update();
         }
@@ -189,22 +49,35 @@ namespace Arkanoid
             state.AddDamage(this, amount);
         }
 
-        /** deactivating command from pool*/
-        public void DeActivate(EnemyPool ep)
+        /// <summary>
+        /// deactivating command from pool
+        /// TODO: add activating state
+        /// </summary>
+        /// <returns></returns>
+        public Enemy DeActivate()
         {
-            if (parentpool == null)
-                parentpool = ep;
-
-            gameObject.SetActive(false);
+            if (gameObject.activeSelf)
+                gameObject.SetActive(false);
+            
+            return this;
         }
 
-        /** deactivating command from pool*/
-        public void Activate(EnemyPool ep)
+        /// <summary>
+        /// deactivating command from pool
+        /// TODO: add deactivating state
+        /// </summary>
+        /// <returns></returns>
+        public Enemy Activate()
         {
-            gameObject.SetActive(true);
+            if(!gameObject.activeSelf)
+                gameObject.SetActive(true);
+
+            return this;
         }
 
-        /** virtual because the most demanding state for the chnges action*/
+        /// <summary>
+        /// virtual because the most demanding state for the chnges action
+        /// </summary>
         public virtual void ToActiveStateActivate()
         {
             state = new EnemyActiveState(this);
@@ -220,6 +93,11 @@ namespace Arkanoid
         public void ToIdleStateActivate()
         {
             state = new EnemyIdleState(this);
+        }
+
+        public void Dispose()
+        {
+            //TODO: implement disposing!
         }
     }
 }

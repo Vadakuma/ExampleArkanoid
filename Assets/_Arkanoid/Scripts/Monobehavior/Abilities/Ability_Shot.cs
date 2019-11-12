@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Arkanoid
+namespace Arkanoid.Abilities
 {
     [System.Serializable]
     public class ShotSettings : AbilitySettings

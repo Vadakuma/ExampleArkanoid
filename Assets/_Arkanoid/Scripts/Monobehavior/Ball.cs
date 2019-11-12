@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Arkanoid.Enemies;
 
 namespace Arkanoid
 {
-    /** Unique projectile actor as easy bouncy ball.
-     * */
+    /// <summary>
+    /// Unique projectile actor as easy bouncy ball.
+    /// </summary>
     [RequireComponent(typeof(Rigidbody))]
     public class Ball : MonoBehaviour
     {
@@ -39,7 +40,7 @@ namespace Arkanoid
         public static Ball Instance { get { return _instance; } private set { _instance = value; } }
 
 
-        void Awake()
+        private void Awake()
         {
             Instance = this;
             projectileRigidbody = GetComponent<Rigidbody>();
@@ -48,22 +49,21 @@ namespace Arkanoid
         }
 
         // Use this for initialization
-        void Start()
+        private void Start()
         {
             // initial inpulse
 
             StopMoving();
         }
 
-        void FixedUpdate()
+        private void FixedUpdate()
         {
             direction = projectileRigidbody.velocity;
         }
 
-        // Update is called once per frame
-        void Update() {    }
-
-        /** Set to initial position,reactivate components, stop moving  */
+        /// <summary>
+        /// Set to initial position,reactivate components, stop moving
+        /// </summary>
         public void ResetProjectile()
         {
             gameObject.SetActive(true);
@@ -98,8 +98,11 @@ namespace Arkanoid
             }
         }
 
-        /** Colliding for scene object - wall or player platform*/
-        void OnCollisionEnter(Collision collisionInfo)
+        /// <summary>
+        /// Colliding for scene object - wall or player platform
+        /// </summary>
+        /// <param name="collisionInfo"></param>
+        private void OnCollisionEnter(Collision collisionInfo)
         {
             //Debug.Log("Projectile OnCollisionEnter");
             ContactPoint cp = collisionInfo.contacts[0];
@@ -160,15 +163,22 @@ namespace Arkanoid
             gameObject.SetActive(false);
         }
 
-        /* Spawn some destroy effects **/
+        /// <summary>
+        /// Spawn some destroy effects 
+        /// </summary>
         private void DestroyEffects()
         {
-
+            //TODO: implement destroy effect
         }
 
-        /** Moving with platform direction for a while time
-         * This is helping to set move direction to projectile 
-         */
+
+        /// <summary>
+        /// Moving with platform direction for a while time
+        ///  This is helping to set move direction to projectile
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="normal"></param>
+        /// <returns></returns>
         private IEnumerator StickingToPlatformEffect(Rigidbody r, Vector3 normal)
         {
             // bumper effect to speed up ball

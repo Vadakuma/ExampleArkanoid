@@ -1,12 +1,14 @@
-﻿using System.Collections;
+﻿using Arkanoid.Abilities;
+using Arkanoid.Enemies;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Arkanoid
+namespace Arkanoid.LevelGenerator
 {
-    /** Reset and Generate new levels
-
-     * */
+    /// <summary>
+    /// Reset and Generate new levels
+    /// </summary>
     public class Level : MonoBehaviour
     {
         [SerializeField, Tooltip("Set level ball prefab")]
@@ -40,7 +42,9 @@ namespace Arkanoid
             SpawnBall();
         }
 
-        /** setup btick by lase level settings*/
+        /// <summary>
+        ///  setup brick by lase level settings
+        /// </summary>
         public void RestartLastLevel()
         {
             // levelGenerator = new SimpleGenerator(10, enemyPool, enemySpawnPoint);
@@ -53,7 +57,6 @@ namespace Arkanoid
             SpawnBall();
         }
 
-        /** */
         private void SpawnBall()
         {
             if(Ball.Instance != null)
@@ -78,65 +81,6 @@ namespace Arkanoid
             rand = Random.Range(0, abilities.Count);
             return abilities[rand];
         }
-    }
-
-
-
-
-
-
-
-    public interface ILevelGenerator
-    {
-        LevelSettings Generate();
-        void ResetLevel(LevelSettings _ls);
-    }
-
-    /** Generate enemies for example*/ // temp
-    [System.Serializable]
-    public class SimpleGenerator : ILevelGenerator
-    {
-        public SimpleGenerator()
-        {
-
-        }
-
-        /** Get some random level settings and generate enemy- brick simple wall
-        * return random selected and used level settings 
-        */
-        public LevelSettings Generate()
-        {
-            LevelSettings ls = GameState.gameData.GetRandomLevelSettings;
-            EnemyManager.Instance.GenerateEnemyPosition(ls);
-
-            return ls;
-        }
-
-        public void ResetLevel(LevelSettings _ls)
-        {
-            EnemyManager.Instance.GenerateEnemyPosition(_ls);
-        }
-    }
-
-    /** example*/
-    [System.Serializable]
-    public class SpawnPrefabGenerator : ILevelGenerator
-    {
-        private string prefabName;
-
-        public SpawnPrefabGenerator(string prefabname)
-        {
-            prefabName = prefabname;
-        }
-        public LevelSettings Generate()
-        {
-            LevelSettings ls = GameState.gameData.GetRandomLevelSettings;
-            // get and spawn gameobject from resources by prefabName
-            Debug.Log("Generate: " + prefabName);
-            return ls;
-        }
-
-        public void ResetLevel(LevelSettings _ls) { }
     }
 
 }

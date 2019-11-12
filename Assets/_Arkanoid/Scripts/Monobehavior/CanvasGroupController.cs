@@ -8,11 +8,11 @@ namespace Arkanoid
     [RequireComponent(typeof(CanvasGroup))]
 	public class CanvasGroupController : MonoBehaviour {
 
-		private CanvasGroup 	canvasGroup;
-		private float 			currcgAlpha;
-		private float 			needcgAlpha;
-		private float 			smoothness = 0.1f;
-		private bool			destroy = false;
+		private CanvasGroup 	_canvasGroup;
+		private float 			_currcgAlpha;
+		private float 			_needcgAlpha;
+		private float 			_smoothness = 0.1f;
+		private bool			_destroy = false;
 
 
         public delegate void 	    AlphaUpdate();
@@ -22,59 +22,69 @@ namespace Arkanoid
         private AlphaUpdate RestartDoneMethod = () => { };
 
 
-        /** _cg - canvasGroup to control
-		* _alpha - current value in alpha field
-		* _smoothness - lerp smoothnes on changing 
-		* _destroy - destroy CanvasGroupController at the end
-		*/
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="_cg">canvasGroup to control</param>
+        /// <param name="_alpha"> current value in alpha filed</param>
+        /// <param name="_smoothness">lerp smoothnnes</param>
+        /// <param name="_destroy"> destroy CanvasGroupController at the end</param>
         public void Fade(CanvasGroup _cg, float _alpha, float _smoothness, bool _destroy)
 		{
-			needcgAlpha = _alpha;
-			canvasGroup = _cg;
-			smoothness  = _smoothness;
-			destroy		= _destroy;
+			_needcgAlpha = _alpha;
+			_canvasGroup = _cg;
+			this._smoothness  = _smoothness;
+			this._destroy		= _destroy;
 
 			if(_alpha > 0.5f) {
-				canvasGroup.interactable   = true;
-				canvasGroup.blocksRaycasts = true;
+				_canvasGroup.interactable   = true;
+				_canvasGroup.blocksRaycasts = true;
 				AlphaUpdater  = new AlphaUpdate(AlphaTo_1);
 			} else {
-				canvasGroup.interactable   = false;
-				canvasGroup.blocksRaycasts = false;
+				_canvasGroup.interactable   = false;
+				_canvasGroup.blocksRaycasts = false;
 				AlphaUpdater  = new AlphaUpdate(AlphaTo_0);
 			}
 		}
 
-        /** _cg - canvasGroup to control
-		* _alpha - current value in alpha filed
-		* _smoothness - Lerp smoothnes on changing 
-		* _destroy - destroy CanvasGroupController at the end
-        * _restartDoneMethod - 
-		*/
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="_cg">canvasGroup to control</param>
+        /// <param name="_alpha">current value in alpha filed</param>
+        /// <param name="_smoothness">lerp smoothnnes</param>
+        /// <param name="_destroy"></param>
+        /// <param name="_restartDoneMethod">destroy CanvasGroupController at the end</param>
         public void Fade(CanvasGroup _cg, float _alpha, float _smoothness, bool _destroy, AlphaUpdate _restartDoneMethod)
         {
-            needcgAlpha = _alpha;
-            canvasGroup = _cg;
-            smoothness = _smoothness;
-            destroy = _destroy;
+            _needcgAlpha = _alpha;
+            _canvasGroup = _cg;
+            this._smoothness = _smoothness;
+            this._destroy = _destroy;
 
             if (_alpha > 0.5f)
             {
-                canvasGroup.interactable = true;
-                canvasGroup.blocksRaycasts = true;
+                _canvasGroup.interactable = true;
+                _canvasGroup.blocksRaycasts = true;
                 AlphaUpdater = new AlphaUpdate(AlphaTo_1);
             }
             else
             {
-                canvasGroup.interactable = false;
-                canvasGroup.blocksRaycasts = false;
+                _canvasGroup.interactable = false;
+                _canvasGroup.blocksRaycasts = false;
                 AlphaUpdater = new AlphaUpdate(AlphaTo_0);
             }
             RestartDoneMethod = _restartDoneMethod;
             OnUpdateDoneEvent += RestartDoneMethod;
         }
 
-        /** apply some canvas group params */
+        /// <summary>
+        /// apply some canvas group params
+        /// </summary>
+        /// <param name="_cg">canvasGroup to control</param>
+        /// <param name="_alpha">current value in alpha filed</param>
+        /// <param name="_blockraycasts"></param>
+        /// <param name="_interactable"></param>
         public static void UpdateCanvasGroup(CanvasGroup _cg, float _alpha, bool _blockraycasts, bool _interactable) {
 			if(_cg) {
 				_cg.alpha 		   = _alpha;
@@ -90,24 +100,24 @@ namespace Arkanoid
 
 		private void AlphaTo_0()
 		{
-			canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, needcgAlpha, smoothness);
-			if(canvasGroup.alpha < 0.05f) {
+			_canvasGroup.alpha = Mathf.Lerp(_canvasGroup.alpha, _needcgAlpha, _smoothness);
+			if(_canvasGroup.alpha < 0.05f) {
 				StopUpdater();
 			}
 		}
 
 		private void AlphaTo_1()
 		{
-			canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, needcgAlpha, smoothness);
-			if(needcgAlpha - canvasGroup.alpha < 0.05f) {
+			_canvasGroup.alpha = Mathf.Lerp(_canvasGroup.alpha, _needcgAlpha, _smoothness);
+			if(_needcgAlpha - _canvasGroup.alpha < 0.05f) {
 				StopUpdater();
 			}
 		}
 
 		private void StopUpdater()
 		{
-			canvasGroup.alpha = needcgAlpha;
-			if(!destroy)
+			_canvasGroup.alpha = _needcgAlpha;
+			if(!_destroy)
 				AlphaUpdater = () => { };
             else
 				Destroy(this);

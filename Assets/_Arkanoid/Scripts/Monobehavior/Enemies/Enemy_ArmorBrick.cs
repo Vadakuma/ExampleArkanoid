@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 
-namespace Arkanoid
+namespace Arkanoid.Enemies
 {
     /** more health*/
     public class Enemy_ArmorBrick : Enemy

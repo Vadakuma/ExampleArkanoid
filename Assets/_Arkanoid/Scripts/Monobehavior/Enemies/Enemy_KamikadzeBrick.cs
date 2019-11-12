@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Arkanoid
+namespace Arkanoid.Enemies
 {
     [System.Serializable]
     public class KamikadzeBrickSettings : IEnemySettings

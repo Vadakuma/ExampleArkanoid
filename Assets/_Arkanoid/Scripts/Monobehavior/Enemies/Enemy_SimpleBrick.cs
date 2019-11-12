@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Arkanoid
+namespace Arkanoid.Enemies
 {
     public class Enemy_SimpleBrick : Enemy
     {

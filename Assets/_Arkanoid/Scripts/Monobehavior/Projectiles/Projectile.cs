@@ -1,11 +1,13 @@
-﻿using System.Collections;
+﻿using Arkanoid.Enemies;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Arkanoid
 {
-    /** For weapon firing. EXAMPLE! Fast implementation!
-     */
+    /// <summary>
+    /// For weapon firing. EXAMPLE! Fast implementation!
+    /// </summary>
     public class Projectile : MonoBehaviour
     {
         [SerializeField]
