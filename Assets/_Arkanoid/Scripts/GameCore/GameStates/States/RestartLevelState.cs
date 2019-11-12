@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Arkanoid.LevelGenerator;
+using Arkanoid.PlayerPlatform;
 
 namespace Arkanoid.GameStates
 {
