@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Arkanoid
+namespace Arkanoid.UI
 {
     [RequireComponent(typeof(CanvasGroup))]
     [RequireComponent(typeof(CanvasGroupController))]

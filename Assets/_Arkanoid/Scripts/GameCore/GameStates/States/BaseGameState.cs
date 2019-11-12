@@ -1,6 +1,7 @@
 ﻿using Arkanoid.Enemies;
 using Arkanoid.PickUps;
 using Arkanoid.PlayerPlatform;
+using Arkanoid.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

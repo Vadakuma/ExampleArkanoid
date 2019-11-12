@@ -2,76 +2,82 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Arkanoid
+namespace Arkanoid.UI
 {
-    /** */
     [RequireComponent(typeof(CanvasGroup))]
     [RequireComponent(typeof(CanvasGroupController))]
     public class GUIManager : MonoBehaviour
     {
         // container with all in level menus. UICanvasContainer allow to easy fadeInOut staff
-        private Dictionary<string, UICanvasContainer> menus = new Dictionary<string, UICanvasContainer>();
+        private Dictionary<string, UICanvasContainer> _menus = new Dictionary<string, UICanvasContainer>();
 
-
+        //TODO: implement normal singletone 
         private static GUIManager _instance;
         public  static GUIManager Instance { get { return _instance; } private set { _instance = value; } }
+
         // UICanvasContainer allow to easier make fadeInOut staff
-        private UICanvasContainer   menu;
-        private SceneLoad           sceneLoad = new SceneLoad();
+        private UICanvasContainer   _menu;
+        private SceneLoad           _sceneLoad = new SceneLoad();
         // UICanvasContainer allow to easier make fadeInOut staff
-        private UICanvasContainer gUIManagerCanvasContainer;
+        private UICanvasContainer   _gUIManagerCanvasContainer;
 
         // Use this for initialization
-        void Awake()
+        private void Awake()
         {
             Instance = this;
-            gUIManagerCanvasContainer = new UICanvasContainer(gameObject.GetComponent<CanvasGroup>(),
+            _gUIManagerCanvasContainer = new UICanvasContainer(gameObject.GetComponent<CanvasGroup>(),
                 gameObject.GetComponent<CanvasGroupController>());
 
-            gUIManagerCanvasContainer.UpdateCanvasGroup(1, true, true); // fast dark in
+            _gUIManagerCanvasContainer.UpdateCanvasGroup(1, true, true); // fast dark in
         }
 
-        void Start()
+        private void Start()
         {
             // start fade out
-            gUIManagerCanvasContainer.Fade(0, 0.05f, false); // fast dark out
+            _gUIManagerCanvasContainer.Fade(0, 0.05f, false); // fast dark out
         }
 
-        /**collecting all menus from scene */
+        /// <summary>
+        /// collecting all menus from scene
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="uicc"></param>
         public void AddMenu(string key, UICanvasContainer uicc)
         {
-            menus.Add(key, uicc);
+            _menus.Add(key, uicc);
         }
 
-        /** Activate menu by key */
+        /// <summary>
+        /// Activate menu by key
+        /// </summary>
+        /// <param name="key"></param>
         public void SpawnMenu(string key)
         {
-            //Debug.Log("SpawnPopup: " + key);
-            menus.TryGetValue(key, out menu);
-            if(menu != null)
+            if(_menus.TryGetValue(key, out _menu))
             {
-                menu.Fade(1.0f, 0.1f, false);
+                _menu.Fade(1.0f, 0.1f, false);
             }
         }
 
-        /** Deactivate menu by key */
+        /// <summary>
+        /// Deactivate menu by key
+        /// </summary>
+        /// <param name="key"></param>
         public void CloseMenu(string key)
         {
             //Debug.Log("ClosePopup: " + key);
-            menus.TryGetValue(key, out menu);
-            if (menu != null)
+            if (_menus.TryGetValue(key, out _menu))
             {
-                menu.Fade(0.0f, 0.1f, false);
+                _menu.Fade(0.0f, 0.1f, false);
             }
         }
 
-        /** */
         public void GoToScene(int index)
         {
             // need to save a data!
-            StartCoroutine(sceneLoad.AsyncLoad(index));
+            StartCoroutine(_sceneLoad.AsyncLoad(index));
             // Restart fade effect with special listener ActivateScene
-            gUIManagerCanvasContainer.cgcontroller.Fade(gUIManagerCanvasContainer.cgroup, 1.0f, 0.05f, false, OnFadeGoToScene);
+            _gUIManagerCanvasContainer.cgcontroller.Fade(_gUIManagerCanvasContainer.cgroup, 1.0f, 0.05f, false, OnFadeGoToScene);
         }
 
         public void GoToMainMenu()
@@ -79,10 +85,9 @@ namespace Arkanoid
             GoToScene(0);
         }
 
-        /** */
         private void OnFadeGoToScene()
         {
-            sceneLoad.Activation(); // loaded scene activation
+            _sceneLoad.Activation(); // loaded scene activation
         }
 
 
