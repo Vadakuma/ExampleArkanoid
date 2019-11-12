@@ -13,7 +13,7 @@ namespace Arkanoid.Enemies
         [SerializeField,Tooltip("List with enemies prefabs for spawn in the pool")]
         private List<Enemy>       _enemies = new List<Enemy>();
 
-
+        //TODO: implement normal singletone 
         private static EnemyManager _instance;
         public static EnemyManager Instance { get { return _instance; } private set { _instance = value; } }
 

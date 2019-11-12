@@ -40,7 +40,7 @@ namespace Arkanoid.GameStates
         }
 
         /** */
-        void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
+        private void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
         {
             if (scene.buildIndex != 0) // check that it is right Game level by index and generate scene stuff
                 GoToGenerateLevelState();
@@ -54,7 +54,6 @@ namespace Arkanoid.GameStates
         private void Update()  {
             state.Update();
         }
-
 
         /** 
          * STATE switches

@@ -10,8 +10,6 @@ namespace Arkanoid.Enemies
     /// </summary>
     public class EnemyPool : IDisposable
     {
-
-
         private Dictionary<EnemyType, EnemyTypePool> _pools = new Dictionary<EnemyType, EnemyTypePool>();
 
         private struct EnemyTypePool : IDisposable
@@ -34,6 +32,7 @@ namespace Arkanoid.Enemies
                     if(_original == null)
                     {
                         Debug.LogError("Something wrong with _original");
+                        //TODO: return enemy dummy
                         return null;
                     }
 

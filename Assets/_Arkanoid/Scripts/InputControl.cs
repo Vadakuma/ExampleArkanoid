@@ -1,4 +1,5 @@
 ﻿using Arkanoid.GameStates;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine;
 
 namespace Arkanoid
 {
-    public class InputControl
+    public class InputControl : IDisposable
     {
         //TODO: create dictionary with commands
         private Cmd toLeftCmd = new LeftWinCmd();
@@ -42,7 +43,10 @@ namespace Arkanoid
         }
 
 #if UNITY_STANDALONE
-        /** BASE Windows Input stuff*/
+        /// <summary>
+        /// BASE Windows Input stuff
+        /// </summary>
+        /// <returns></returns>
         private IPlatformCommand InputUpdater_STANDALONE()
         {
             if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
@@ -100,7 +104,7 @@ namespace Arkanoid
 #endif
 
         /** */
-        public void OnDispose()
+        public void Dispose()
         {
             // remove event methods
 #if UNITY_STANDALONE
@@ -115,13 +119,17 @@ namespace Arkanoid
 
 
 
-    /** Set up for list of commands from Platform*/
+    /// <summary>
+    /// Set up for list of commands from Platform
+    /// </summary>
     public interface IPlatformCommand
     {
         void execute(Platform mb);
     }
 
-    /** BASE player platform movement class*/
+    /// <summary>
+    /// BASE player platform movement class
+    /// </summary>
     public abstract class Cmd : IPlatformCommand
     {
         protected int status;
@@ -134,7 +142,9 @@ namespace Arkanoid
         }
     }
 
-    /**  moving to the left side  */
+    /// <summary>
+    /// moving to the left side 
+    /// </summary>
     public class LeftWinCmd : Cmd
     {
         public LeftWinCmd()
@@ -143,7 +153,9 @@ namespace Arkanoid
         }
     }
 
-    /** moving to the right side */
+    /// <summary>
+    /// moving to the right side
+    /// </summary>
     public class RightWinCmd : Cmd
     {
         public RightWinCmd()
@@ -153,7 +165,9 @@ namespace Arkanoid
     }
 
 
-    /** pause by escape */
+    /// <summary>
+    /// pause by escape
+    /// </summary>
     public class EscapeWinCmd : Cmd
     {
         public override void execute(Platform pc)
