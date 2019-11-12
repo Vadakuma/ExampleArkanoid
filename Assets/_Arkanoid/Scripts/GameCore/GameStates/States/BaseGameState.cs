@@ -1,4 +1,5 @@
 ﻿using Arkanoid.Enemies;
+using Arkanoid.PickUps;
 using Arkanoid.PlayerPlatform;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,7 +7,6 @@ using UnityEngine;
 
 namespace Arkanoid.GameStates
 {
-    /** */
     public abstract class BaseGameState : IGameState
     {
         protected string stateName = "BaseGameState";
@@ -35,7 +35,6 @@ namespace Arkanoid.GameStates
 
         public virtual void Update() { }
 
-        /** */
         public void SetActiveGameActors()
         {
             // update value
@@ -47,7 +46,6 @@ namespace Arkanoid.GameStates
 
         protected virtual void SetStateName() { }
 
-        /** */
         public void SetDeActiveGameActors()
         {
             // update value

@@ -1,4 +1,5 @@
 ﻿using Arkanoid.Abilities;
+using Arkanoid.PickUps;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

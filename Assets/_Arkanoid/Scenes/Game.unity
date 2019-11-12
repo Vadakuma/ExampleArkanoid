@@ -3802,9 +3802,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbafd95a3f2ec9f409716b7539c9a9bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useAbilitySpawner: 1
-  pickupSpawnFrequency: 10
-  pickups:
+  _useAbilitySpawner: 1
+  _pickupSpawnFrequency: 10
+  _pickups:
   - {fileID: 1743309051593518, guid: 875f49344ac28c04ca432955af0fe502, type: 3}
 --- !u!1 &1556025090
 GameObject:
