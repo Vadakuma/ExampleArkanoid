@@ -1,12 +1,33 @@
-/Out
+# =============== #
+# Unity generated #
+# =============== #
+Temp/
+Library/
 
-# Ignore Unity artifacts
-/Library
-/Temp
-/obj
-/.vs
-*.csproj
-*.pidb
-*.sln
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+ExportedObj/
+obj/
+*.svd
 *.userprefs
-*.meta
+/*.csproj
+*.pidb
+*.suo
+/*.sln
+*.user
+*.unityproj
+*.booproj
+.vs
+
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Logs/
