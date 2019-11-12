@@ -15,6 +15,7 @@ namespace Arkanoid
      * */
     public class GameData : ScriptableObject
     {
+        //TODO: implement normal singletone 
         private static GameData _instance;
         public static GameData Instance { get { return _instance; } private set { _instance = value; } }
 

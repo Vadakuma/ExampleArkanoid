@@ -90,7 +90,7 @@ namespace Arkanoid.Enemies
         {
             int amount = ls.enemyAmount;
 
-            if (amount == 0 || _enemyPool == null)
+            if (amount == 0 || _enemyPool == null || _enemySpawnPoint == null)
             {
                 Debug.LogWarning("Something wrong in GenerateEnemyPosition");
                 return;
