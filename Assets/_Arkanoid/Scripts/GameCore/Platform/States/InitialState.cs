@@ -10,7 +10,7 @@ namespace Arkanoid.PlayerPlatform
     public abstract class InitialState : IPlatformState
     {
         // link to current tick command
-        private ICommand command;
+        private IPlatformCommand command;
         // 
         private InputControl inputcontrol;
         // base settings about movement and health

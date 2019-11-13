@@ -16,7 +16,7 @@ namespace Arkanoid.GameInput
         private Cmd toRightCmd = new RightWinCmd();
         private Cmd toPauseCmd = new EscapeWinCmd();
 
-        public delegate ICommand InpuUpdate();
+        public delegate IPlatformCommand InpuUpdate();
         public event InpuUpdate Update = () => { return null; };
 
 
@@ -39,7 +39,7 @@ namespace Arkanoid.GameInput
         }
 
         // Min updater. See Platform states Update method
-        public ICommand InputUpdater()
+        public IPlatformCommand InputUpdater()
         {
             return Update(); // return result depends on device platfrom 
         }
@@ -49,7 +49,7 @@ namespace Arkanoid.GameInput
         /// BASE Windows Input stuff
         /// </summary>
         /// <returns></returns>
-        private ICommand InputUpdater_STANDALONE()
+        private IPlatformCommand InputUpdater_STANDALONE()
         {
             if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
             {
