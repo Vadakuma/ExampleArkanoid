@@ -15,6 +15,17 @@ namespace Arkanoid
         private static event Action OnLateUpdate;
         private static event Action OnFixedUpdate;
 
+        public static void SubscribeToFixedUpdate(Action e)
+        {
+            OnFixedUpdate -= e; // just in case if it the method called multiple times.
+            OnFixedUpdate += e;
+        }
+
+        public static void UnSubscribeFromFixedUpdate(Action e)
+        {
+            OnFixedUpdate -= e;
+        }
+
         public static void SubscribeToUpdate(Action e)
         {
             OnUpdate -= e; // just in case if it the method called multiple times.
