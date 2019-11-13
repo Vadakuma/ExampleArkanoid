@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Arkanoid.Abilities;
+using Arkanoid.Commands;
+using Arkanoid.GameInput;
 
 namespace Arkanoid.PlayerPlatform
 {
     public abstract class InitialState : IPlatformState
     {
         // link to current tick command
-        private IPlatformCommand command;
+        private ICommand command;
         // 
         private InputControl inputcontrol;
         // base settings about movement and health

@@ -1,4 +1,5 @@
-﻿using Arkanoid.GameStates;
+﻿using Arkanoid.Commands;
+using Arkanoid.GameStates;
 using Arkanoid.PlayerPlatform;
 using System;
 using System.Collections;
@@ -6,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Arkanoid
+namespace Arkanoid.GameInput
 {
     public class InputControl : IDisposable
     {
@@ -15,7 +16,7 @@ namespace Arkanoid
         private Cmd toRightCmd = new RightWinCmd();
         private Cmd toPauseCmd = new EscapeWinCmd();
 
-        public delegate IPlatformCommand InpuUpdate();
+        public delegate ICommand InpuUpdate();
         public event InpuUpdate Update = () => { return null; };
 
 
@@ -38,7 +39,7 @@ namespace Arkanoid
         }
 
         // Min updater. See Platform states Update method
-        public IPlatformCommand InputUpdater()
+        public ICommand InputUpdater()
         {
             return Update(); // return result depends on device platfrom 
         }
@@ -48,7 +49,7 @@ namespace Arkanoid
         /// BASE Windows Input stuff
         /// </summary>
         /// <returns></returns>
-        private IPlatformCommand InputUpdater_STANDALONE()
+        private ICommand InputUpdater_STANDALONE()
         {
             if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
             {
@@ -115,68 +116,6 @@ namespace Arkanoid
 #if UNITY_ANDROID
             Update -= InputUpdater_ANDROID;
 #endif
-        }
-    }
-
-
-
-    /// <summary>
-    /// Set up for list of commands from Platform
-    /// </summary>
-    public interface IPlatformCommand
-    {
-        void execute(Platform mb);
-    }
-
-    /// <summary>
-    /// BASE player platform movement class
-    /// </summary>
-    public abstract class Cmd : IPlatformCommand
-    {
-        protected int status;
-        public virtual void execute(Platform pc)
-        {
-            if (pc)
-            {
-                pc.MoveTo(status);
-            }
-        }
-    }
-
-    /// <summary>
-    /// moving to the left side 
-    /// </summary>
-    public class LeftWinCmd : Cmd
-    {
-        public LeftWinCmd()
-        {
-            status = -1; // setup to the left moving
-        }
-    }
-
-    /// <summary>
-    /// moving to the right side
-    /// </summary>
-    public class RightWinCmd : Cmd
-    {
-        public RightWinCmd()
-        {
-            status = 1; // setup to the right moving
-        }
-    }
-
-
-    /// <summary>
-    /// pause by escape
-    /// </summary>
-    public class EscapeWinCmd : Cmd
-    {
-        public override void execute(Platform pc)
-        {
-            if (GameState.Instance)
-            {
-                GameState.Instance.GoToPauseState();
-            }
         }
     }
 }
