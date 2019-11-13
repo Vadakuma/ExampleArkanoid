@@ -8,11 +8,12 @@ using UnityEditor;
 
 namespace Arkanoid
 {
-    /** General Game Settings
-     *  Level settings
-     *  Player Data containers
-     *  Lose conditions
-     * */
+    /// <summary>
+    /// General Game Settings
+    /// Level settings
+    /// Player Data containers
+    /// Lose conditions
+    /// </summary>
     public class GameData : ScriptableObject
     {
         //TODO: implement normal singletone 
@@ -29,7 +30,9 @@ namespace Arkanoid
         public List<PlayerData>             SessionsResults = new List<PlayerData>();
 
 
-        /** Condition about win or lose stuff*/
+        /// <summary>
+        /// Condition about win or lose stuff
+        /// </summary>
         public SessionCondition GetLoseCondition
         {
             get
@@ -38,7 +41,40 @@ namespace Arkanoid
             }
         }
 
-        /** check and add*/
+        /// <summary>
+        /// Params like a score during in the game session
+        /// </summary>
+        protected static PlayerData sessionPlayerData = new PlayerData();
+
+        public static PlayerData SessionPlayerData
+        {
+            get
+            {
+                return sessionPlayerData;
+            }
+            private set { sessionPlayerData = value; }
+        }
+
+        /// <summary>
+        /// for level generator
+        /// </summary>
+        public LevelSettings GetRandomLevelSettings
+        {
+            get
+            {
+                if (levelSettings.Count > 0)
+                    return levelSettings[Random.Range(0, levelSettings.Count)];
+                else
+                    return new LevelSettings(); // bad
+            }
+            private set { }
+        }
+
+
+        /// <summary>
+        /// check and add
+        /// </summary>
+        /// <param name="pd"></param>
         public void AddSessionsResult(PlayerData pd)
         {
             // accumulate total score
@@ -50,23 +86,18 @@ namespace Arkanoid
             SessionsResults.Add(pd);
         }
 
-        protected static PlayerData sessionPlayerData = new PlayerData();
-        /** Params like a score during in the game session*/
-        public static PlayerData SessionPlayerData
-        {
-            get
-            {
-                return sessionPlayerData;
-            }
-            private set { sessionPlayerData = value; }
-        }
-
-        /** add score duting in the game session*/
+        /// <summary>
+        /// add score duting in the game session
+        /// </summary>
+        /// <param name="score"></param>
         public static void ApplyScore(int score)
         {
             sessionPlayerData.Score += score;
         }
-        /** reset session score */
+
+        /// <summary>
+        /// reset session score
+        /// </summary>
         public static void ResetScore()
         {
             // set in score last win result
@@ -78,23 +109,15 @@ namespace Arkanoid
             sessionPlayerData.MaxRoundCounter = 0;
         }
 
-        /** reset all previus scores, before start a new game */
+        /// <summary>
+        /// reset all previus scores, before start a new game
+        /// </summary>
         public void ResetAllSavedScoreData()
         {
             SessionsResults = new List<PlayerData>();
             ResetScore();
         }
 
-        /** for level generator*/
-        public LevelSettings GetRandomLevelSettings {
-            get {
-                if (levelSettings.Count > 0)
-                    return levelSettings[Random.Range(0, levelSettings.Count)];
-                else
-                    return new LevelSettings(); // bad
-            }
-            private set { }
-        }
 
 #if UNITY_EDITOR
             // creating asset from unity menu, but removing this from compilation build
