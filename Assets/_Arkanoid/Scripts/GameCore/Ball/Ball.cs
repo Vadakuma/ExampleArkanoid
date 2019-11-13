@@ -56,7 +56,19 @@ namespace Arkanoid
             StopMoving();
         }
 
-        private void FixedUpdate()
+
+        private void OnEnable()
+        {
+            UpdateManager.SubscribeToFixedUpdate(OnFixedUpdate);
+        }
+
+        private void OnDisable()
+        {
+            UpdateManager.UnSubscribeFromFixedUpdate(OnFixedUpdate);
+        }
+
+
+        private void OnFixedUpdate()
         {
             direction = projectileRigidbody.velocity;
         }
@@ -74,7 +86,6 @@ namespace Arkanoid
             StopMoving();
         }
 
-        /** */
         public void StopMoving()
         {
             if (projectileRigidbody != null)
@@ -86,7 +97,6 @@ namespace Arkanoid
             }
         }
 
-        /** */
         public void StartMoving()
         {
             if (projectileRigidbody.velocity == Vector3.zero)
@@ -144,7 +154,6 @@ namespace Arkanoid
             }
         }
 
-        /** */
         private void DestroyState()
         {
             if (projectileCollider == null)
