@@ -12,7 +12,7 @@ namespace Arkanoid.Abilities
     }
 
     [System.Serializable]
-    public class Ability_Shot : Ability
+    public class AbilityShot : Ability
     {
         [SerializeField]
         protected ShotSettings abilitySettings = new ShotSettings();

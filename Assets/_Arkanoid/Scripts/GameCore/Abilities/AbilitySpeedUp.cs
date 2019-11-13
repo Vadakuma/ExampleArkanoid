@@ -14,7 +14,7 @@ namespace Arkanoid.Abilities
     }
 
     [System.Serializable]
-    public class Ability_SpeedUp : Ability
+    public class AbilitySpeedUp : Ability
     {
         [SerializeField]
         protected SpeedUpSettings abilitySettings = new SpeedUpSettings();

@@ -6,7 +6,7 @@ namespace Arkanoid.UI
 {
     [RequireComponent(typeof(CanvasGroup))]
     [RequireComponent(typeof(CanvasGroupController))]
-    public class GUIMenu_Win : GUIMenu
+    public class MenuWait : BaseMenu
     {
 
     }

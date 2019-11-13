@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Arkanoid.UI
 {
-    public abstract class GUIMenu : MonoBehaviour
+    public abstract class BaseMenu : MonoBehaviour
     {
         public enum UICommands
         {

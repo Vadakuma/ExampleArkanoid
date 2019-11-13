@@ -11,17 +11,17 @@ namespace Arkanoid.UI
     {
         private SceneLoad sceneLoad = new SceneLoad();
         // UICanvasContainer allow to easier make fadeInOut staff
-        private UICanvasContainer uICanvasContainer = new UICanvasContainer();
+        private UICanvasContainer _uiCanvasContainer = new UICanvasContainer();
 
         // Use this for initialization
         private void Start()
         {
-            uICanvasContainer = new UICanvasContainer(gameObject.GetComponent<CanvasGroup>(),
+            _uiCanvasContainer = new UICanvasContainer(gameObject.GetComponent<CanvasGroup>(),
                 gameObject.GetComponent<CanvasGroupController>());
 
-            uICanvasContainer.UpdateCanvasGroup(0, true, true); // fast dark in
+            _uiCanvasContainer.UpdateCanvasGroup(0, true, true); // fast dark in
             // and
-            uICanvasContainer.Fade(1, 0.05f, false); // slow dark out
+            _uiCanvasContainer.Fade(1, 0.05f, false); // slow dark out
         }
 
 
@@ -29,13 +29,13 @@ namespace Arkanoid.UI
         {
             StartCoroutine(sceneLoad.AsyncLoad(index));
             // Restart fade effect with special listener ActivateScene
-            uICanvasContainer.cgcontroller.Fade(uICanvasContainer.cgroup, 0.0f, 0.05f, false, OnFadeGoToScene);
+            _uiCanvasContainer.cgcontroller.Fade(_uiCanvasContainer.cgroup, 0.0f, 0.05f, false, OnFadeGoToScene);
         }
 
         public void ApplicationQuit()
         {
             // Restart fade effect with special listener ActivateScene
-            uICanvasContainer.cgcontroller.Fade(uICanvasContainer.cgroup, 0.0f, 0.05f, false, OnFadeQuit);
+            _uiCanvasContainer.cgcontroller.Fade(_uiCanvasContainer.cgroup, 0.0f, 0.05f, false, OnFadeQuit);
         }
 
        

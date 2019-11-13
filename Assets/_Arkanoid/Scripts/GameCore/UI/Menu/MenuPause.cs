@@ -6,7 +6,7 @@ namespace Arkanoid.UI
 {
     [RequireComponent(typeof(CanvasGroup))]
     [RequireComponent(typeof(CanvasGroupController))]
-    public class GUIMenu_Lose : GUIMenu
+    public class MenuPause : BaseMenu
     {
 
     }

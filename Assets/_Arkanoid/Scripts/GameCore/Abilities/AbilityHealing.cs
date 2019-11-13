@@ -13,7 +13,7 @@ namespace Arkanoid.Abilities
     }
 
     [System.Serializable]
-    public class Ability_Healing : Ability
+    public class AbilityHealing : Ability
     {
         [SerializeField]
         protected HealingSettings abilitySettings = new HealingSettings();
