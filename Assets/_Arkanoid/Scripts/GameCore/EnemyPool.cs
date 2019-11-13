@@ -91,7 +91,12 @@ namespace Arkanoid.Enemies
 
                 var pool = new Queue<Enemy>();
                 for (int idx = 0; idx < size; ++idx)
-                    pool.Enqueue(GameObject.Instantiate(enemy).DeActivate());
+                {
+                    var instance = GameObject.Instantiate(enemy).DeActivate();
+                    instance.transform.SetParent(parent);
+                    pool.Enqueue(instance);
+                }
+                    
 
                 if(!_pools.ContainsKey(enemy.EnemyType))
                     _pools.Add(enemy.EnemyType, new EnemyTypePool(enemy, pool, parent));
