@@ -23,7 +23,10 @@ namespace Arkanoid.Enemies
         public virtual void Update() { }
         public virtual void AddDamage(Enemy e, int amount) { }
 
-        /** set and save general links and settings*/
+        /// <summary>
+        /// set and save general links and settings
+        /// </summary>
+        /// <param name="e"></param>
         protected void SetSettings(Enemy e)
         {
             parent = e;

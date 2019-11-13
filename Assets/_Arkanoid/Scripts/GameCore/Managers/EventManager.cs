@@ -34,7 +34,7 @@ namespace Arkanoid
             }
         }
 
-        void Init()
+        private void Init()
         {
             if (eventDictionary == null)
             {
@@ -47,9 +47,8 @@ namespace Arkanoid
         {
             if (instance == null)
                 return;
-            UnityEvent thisEvent = null;
 
-            if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
+            if (instance.eventDictionary.TryGetValue(eventName, out UnityEvent thisEvent))
             {
                 thisEvent.AddListener(listener);
             }
@@ -61,22 +60,18 @@ namespace Arkanoid
             }
         }
 
-        /** */
+
         public static void StopListening(int eventName, UnityAction listener)
         {
-            if (eventManager == null) return;
-            UnityEvent thisEvent = null;
-            if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
+            if (instance.eventDictionary.TryGetValue(eventName, out UnityEvent thisEvent))
             {
                 thisEvent.RemoveListener(listener);
             }
         }
 
-        /** */
         public static void TriggerEvent(int eventName)
         {
-            UnityEvent thisEvent = null;
-            if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
+            if (instance.eventDictionary.TryGetValue(eventName, out UnityEvent thisEvent))
             {
                 thisEvent.Invoke();
             }

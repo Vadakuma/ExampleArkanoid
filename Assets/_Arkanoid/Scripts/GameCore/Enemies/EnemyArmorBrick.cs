@@ -6,8 +6,10 @@ using UnityEngine;
 
 namespace Arkanoid.Enemies
 {
-    /** more health*/
-    public class Enemy_ArmorBrick : Enemy
+    /// <summary>
+    /// more health
+    /// </summary>
+    public class EnemyArmorBrick : Enemy
     {
 
     }

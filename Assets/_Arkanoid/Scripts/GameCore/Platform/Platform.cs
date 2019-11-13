@@ -7,10 +7,6 @@ using UnityEngine;
 
 namespace Arkanoid.PlayerPlatform
 {
-
-    /***************************************************************************************************
-     * PLATFORM MONO -  player control actor
-     * *************************************************************************************************/
     [RequireComponent(typeof(Rigidbody))] // for gameplay staff need rigidbody
     public class Platform : MonoBehaviour
     {
@@ -20,8 +16,8 @@ namespace Arkanoid.PlayerPlatform
         public PlatformSettings GetPlatformSettings { get { return platformSettings; } private set { } }
 
         // platform state switcher
-        private static IPlatformState state;
-        public static IPlatformState State { get { return state; } private set { state = value; } }
+        private static IPlatformState _state;
+        public static IPlatformState State { get { return _state; } private set { _state = value; } }
 
         private static Platform _instance;
         public static Platform Instance { get { return _instance; } private set { _instance = value; } }
@@ -56,7 +52,7 @@ namespace Arkanoid.PlayerPlatform
 
         private void OnUpdate()
         {
-            state.Update(this);
+            _state.Update(this);
         }
 
         /// <summary>
@@ -64,12 +60,12 @@ namespace Arkanoid.PlayerPlatform
         /// </summary>
         public void GoToIdleState()
         {
-            state = new IdleState(this);
+            _state = new IdleState(this);
         }
 
         public void GoToDeadState()
         {
-            state = new IdleState(this);
+            _state = new IdleState(this);
         }
 
         /// <summary>
@@ -77,35 +73,35 @@ namespace Arkanoid.PlayerPlatform
         /// </summary>
         public void GoToActiveState()
         {
-            state = new ActionState(this);
+            _state = new ActionState(this);
         }
 
         public void GoToResetState()
         {
-            state = new ResetState(this);
+            _state = new ResetState(this);
         }
 
         public void MoveTo(int side)
         {
-            state.MoveTo(this, side);
+            _state.MoveTo(this, side);
         }
 
         public void AddDamage(int amount)
         {
-            state.AddDamage(amount);
+            _state.AddDamage(amount);
         }
 
         public void AddAbility(Pickup pickup)
         {
-            state.AddAbility(this, pickup.AbilityContainer);
+            _state.AddAbility(this, pickup.AbilityContainer);
 
             pickup.DeActivateState();
         }
 
         private void OnDestroy()
         { 
-            if(state != null)
-                state.Disable();
+            if(_state != null)
+                _state.Disable();
         }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Arkanoid.Enemies
 {
-    public class Enemy_SimpleBrick : Enemy
+    public class EnemySimpleBrick : Enemy
     {
 
     }

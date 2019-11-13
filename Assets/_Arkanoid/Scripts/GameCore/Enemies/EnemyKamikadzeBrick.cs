@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Arkanoid.Enemies
 {
-    public class Enemy_KamikadzeBrick : Enemy
+    public class EnemyKamikadzeBrick : Enemy
     {
         [SerializeField]
         protected KamikadzeBrickSettings kamikadzeSettings = new KamikadzeBrickSettings();

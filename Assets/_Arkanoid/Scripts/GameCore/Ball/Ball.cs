@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Arkanoid.Enemies;
+using System.Runtime.CompilerServices;
 
 namespace Arkanoid
 {
@@ -23,18 +24,18 @@ namespace Arkanoid
         public int      DamageAmount { get { return damage; } private set { } }
         public float    Speed { get { return speed; } private set { } }
 
-        private Rigidbody   projectileRigidbody;
-        private Rigidbody   playerRigidbody;
-        private Collider    projectileCollider;
-        private Vector3     direction = Vector3.zero;
-        private Vector3     lastDirection = Vector3.zero;
-        private Vector3     velocity = Vector3.zero;
+        private Rigidbody   _projectileRigidbody;
+        private Rigidbody   _playerRigidbody;
+        private Collider    _projectileCollider;
+        private Vector3     _direction      = Vector3.zero;
+        private Vector3     _lastDirection  = Vector3.zero;
+        private Vector3     _velocity       = Vector3.zero;
 
         private readonly Vector3 initdir = new Vector3(1, 1, 1);
-        private          Vector3 initpos;
+        private          Vector3 _initpos;
 
 
-        private WaitForSeconds stickingwait = new WaitForSeconds(0.05f);
+        private WaitForSeconds _stickingwait = new WaitForSeconds(0.05f);
 
         private static Ball _instance;
         public static Ball Instance { get { return _instance; } private set { _instance = value; } }
@@ -43,9 +44,9 @@ namespace Arkanoid
         private void Awake()
         {
             Instance = this;
-            projectileRigidbody = GetComponent<Rigidbody>();
+            _projectileRigidbody = GetComponent<Rigidbody>();
 
-            initpos = transform.position;
+            _initpos = transform.position;
         }
 
         // Use this for initialization
@@ -55,7 +56,6 @@ namespace Arkanoid
 
             StopMoving();
         }
-
 
         private void OnEnable()
         {
@@ -70,7 +70,7 @@ namespace Arkanoid
 
         private void OnFixedUpdate()
         {
-            direction = projectileRigidbody.velocity;
+            _direction = _projectileRigidbody.velocity;
         }
 
         /// <summary>
@@ -79,32 +79,32 @@ namespace Arkanoid
         public void ResetProjectile()
         {
             gameObject.SetActive(true);
-            transform.position = initpos;
-            lastDirection = initdir;
-            if (projectileCollider)
-                projectileCollider.enabled = true;
+            transform.position = _initpos;
+            _lastDirection = initdir;
+            if (_projectileCollider)
+                _projectileCollider.enabled = true;
             StopMoving();
         }
 
         public void StopMoving()
         {
-            if (projectileRigidbody != null)
+            if (_projectileRigidbody != null)
             { 
-                if (projectileRigidbody.velocity != Vector3.zero){
-                    lastDirection = projectileRigidbody.velocity;
-                    projectileRigidbody.velocity = Vector3.zero;
+                if (_projectileRigidbody.velocity != Vector3.zero){
+                    _lastDirection = _projectileRigidbody.velocity;
+                    _projectileRigidbody.velocity = Vector3.zero;
                 }
             }
         }
 
         public void StartMoving()
         {
-            if (projectileRigidbody.velocity == Vector3.zero)
+            if (_projectileRigidbody.velocity == Vector3.zero)
             {
-                if (lastDirection == Vector3.zero)
-                    lastDirection = initdir;
+                if (_lastDirection == Vector3.zero)
+                    _lastDirection = initdir;
 
-                projectileRigidbody.velocity = lastDirection.normalized * speed;
+                _projectileRigidbody.velocity = _lastDirection.normalized * speed;
             }
         }
 
@@ -120,20 +120,20 @@ namespace Arkanoid
             // Checking and calculate the next direction to move
             if (useStickToplatformEffect && collisionInfo.gameObject.CompareTag("Player"))
             {
-                lastDirection = projectileRigidbody.velocity;
-                if (playerRigidbody == null)
+                _lastDirection = _projectileRigidbody.velocity;
+                if (_playerRigidbody == null)
                 {
-                    playerRigidbody = collisionInfo.gameObject.GetComponent<Rigidbody>();
+                    _playerRigidbody = collisionInfo.gameObject.GetComponent<Rigidbody>();
                 }
                 // about 0.15f sec
-                StartCoroutine(StickingToPlatformEffect(playerRigidbody, cp.normal));
+                StartCoroutine(StickingToPlatformEffect(_playerRigidbody, cp.normal));
             }
             else
             {
                 // calculate with Vector3.Reflect
-                velocity = Vector3.Reflect(direction, cp.normal);
+                _velocity = Vector3.Reflect(_direction, cp.normal);
                 // bounce effect to speed up ball
-                projectileRigidbody.velocity = velocity.normalized * speed;
+                _projectileRigidbody.velocity = _velocity.normalized * speed;
             }
 
             // Checking type of colliding object (may be it is enemy)
@@ -154,18 +154,19 @@ namespace Arkanoid
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void DestroyState()
         {
-            if (projectileCollider == null)
+            if (_projectileCollider == null)
             {
                 Collider c = gameObject.GetComponent<Collider>();
                 if (c != null)
                 {
-                    projectileCollider = c;
+                    _projectileCollider = c;
                 }
             }
-            if (projectileCollider)
-                projectileCollider.enabled = false;
+            if (_projectileCollider)
+                _projectileCollider.enabled = false;
 
             // initiate destroy procedure
             //Destroy(gameObject, destroyTime);
@@ -175,6 +176,7 @@ namespace Arkanoid
         /// <summary>
         /// Spawn some destroy effects 
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void DestroyEffects()
         {
             //TODO: implement destroy effect
@@ -191,14 +193,14 @@ namespace Arkanoid
         private IEnumerator StickingToPlatformEffect(Rigidbody r, Vector3 normal)
         {
             // bumper effect to speed up ball
-            projectileRigidbody.velocity += r.velocity;
+            _projectileRigidbody.velocity += r.velocity;
 
-            yield return stickingwait;
+            yield return _stickingwait;
 
             // calculate with Vector3.Reflect
-            velocity = Vector3.Reflect(lastDirection, normal);
+            _velocity = Vector3.Reflect(_lastDirection, normal);
             // bumper effect to speed up ball
-            projectileRigidbody.velocity = velocity.normalized * speed;
+            _projectileRigidbody.velocity = _velocity.normalized * speed;
         }
     }
 }

@@ -6,27 +6,23 @@ using Arkanoid.PlayerPlatform;
 
 namespace Arkanoid.PickUps
 {
-
-    /***************************************************************************************************
-     * PICLUP MONO -  pickup control actor
-     * *************************************************************************************************/
     public class Pickup : MonoBehaviour
     {
         [SerializeField]
         protected PickUpSettings    pickUpSettings = new PickUpSettings();
 
-        private PickUpState         state;
-        private Ability             abilityContainer;
-        public  Ability             AbilityContainer { get { return abilityContainer; } private set { } }
-
+        private PickUpState         _state;
+        private Ability             _abilityContainer;
+        public  Ability             AbilityContainer { get { return _abilityContainer; } private set { } }
 
         //Base settings about
         public PickUpSettings GetPickUpSettings { get { return pickUpSettings; } private set { } }
 
+
         // Use this for initialization
         private void Start()
         {
-            state = new PickUpActiveState(this);
+            _state = new PickUpActiveState(this);
         }
 
         private void OnEnable()
@@ -45,15 +41,14 @@ namespace Arkanoid.PickUps
         /// <param name="ab"></param>
         public void SetAbility(Ability ab)
         {
-            abilityContainer = ab;
+            _abilityContainer = ab;
         }
 
         private void OnUpdate()
         {
-            state.Update();
+            _state.Update();
         }
 
-        /** */
         private void OnTriggerEnter(Collider other)
         {
             //Debug.Log("Pickup Ability OnTriggerEnter");
@@ -69,7 +64,7 @@ namespace Arkanoid.PickUps
         /// </summary>
         public void DeActivateState()
         {
-            state = new PickUpDeactiveState(this);
+            _state = new PickUpDeactiveState(this);
         }
     }
 }

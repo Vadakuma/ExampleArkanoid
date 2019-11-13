@@ -83,13 +83,11 @@ namespace Arkanoid.Enemies
             state = new EnemyActiveState(this);
         }
 
-        /** */
         public void ToDeadStateActivate()
         {
             state = new EnemyDeadState(this);
         }
 
-        /** */
         public void ToIdleStateActivate()
         {
             state = new EnemyIdleState(this);

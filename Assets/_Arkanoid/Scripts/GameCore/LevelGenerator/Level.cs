@@ -17,16 +17,15 @@ namespace Arkanoid.LevelGenerator
         protected List<Ability>         abilities = new List<Ability>();
 
 
-        private LevelSettings       levelSettings = new LevelSettings();
-        private ILevelGenerator     levelGenerator;
+        private LevelSettings       _levelSettings = new LevelSettings();
+        private ILevelGenerator     _levelGenerator;
 
         private static Level _instance;
         public  static Level Instance { get { return _instance; } private set { _instance = value; } }
 
+        public LevelSettings GetLevelSettings { get { return _levelSettings; } private set { _levelSettings = value; } }
 
-        public LevelSettings GetLevelSettings { get { return levelSettings; } private set { levelSettings = value; } }
-
-        void Awake()
+        private void Awake()
         {
             Instance = this;
         }
@@ -35,8 +34,8 @@ namespace Arkanoid.LevelGenerator
         public void GenerateLevel()
         {
             // levelGenerator = new SimpleGenerator(10, enemyPool, enemySpawnPoint);
-            levelGenerator = new SimpleGenerator();
-            levelSettings = levelGenerator.Generate();
+            _levelGenerator = new SimpleGenerator();
+            _levelSettings = _levelGenerator.Generate();
 
             // spawn Ball
             SpawnBall();
@@ -48,10 +47,10 @@ namespace Arkanoid.LevelGenerator
         public void RestartLastLevel()
         {
             // levelGenerator = new SimpleGenerator(10, enemyPool, enemySpawnPoint);
-            if (levelGenerator == null)
-                levelGenerator = new SimpleGenerator();
+            if (_levelGenerator == null)
+                _levelGenerator = new SimpleGenerator();
 
-            levelGenerator.ResetLevel(levelSettings);
+            _levelGenerator.ResetLevel(_levelSettings);
 
             // reset settings in Ball or spawn a new one
             SpawnBall();
@@ -74,7 +73,6 @@ namespace Arkanoid.LevelGenerator
             }
         }
 
-        /** */
         public  Ability GetRandLevelAbility()
         {
             int rand;

@@ -9,29 +9,16 @@ namespace Arkanoid
     public interface IWeapon
     {
         void Fire();
-
-    }
-
-    [System.Serializable]
-    public class WeaponSettings
-    {
-        [SerializeField]
-        protected GameObject projectile;
-        [SerializeField]
-        protected Transform firepoint;
-
-        public Transform GetFirepoint { get { return firepoint; } private set { firepoint = value; } }
-        public GameObject GetProjectile { get { return projectile; } private set { projectile = value; } }
     }
 
 
     public class Weapon : MonoBehaviour, IWeapon
     {
 
-        private WeaponSettings weaponSettings;
-        public WeaponSettings GetWeaponSettings { get { return weaponSettings; } private set { weaponSettings = value; } }
+        private WeaponSettings _weaponSettings;
+        public WeaponSettings GetWeaponSettings { get { return _weaponSettings; } private set { _weaponSettings = value; } }
 
-        /** */
+
         public void Fire()
         {
             GameObject go = Instantiate(GetWeaponSettings.GetProjectile);
