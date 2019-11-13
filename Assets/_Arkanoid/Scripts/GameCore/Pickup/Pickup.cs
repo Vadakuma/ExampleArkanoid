@@ -29,6 +29,16 @@ namespace Arkanoid.PickUps
             state = new PickUpActiveState(this);
         }
 
+        private void OnEnable()
+        {
+            UpdateManager.SubscribeToUpdate(OnUpdate);
+        }
+
+        private void OnDisable()
+        {
+            UpdateManager.UnSubscribeFromUpdate(OnUpdate);
+        }
+
         /// <summary>
         ///  Set ability to this pickup when spawning from PickUpManager.cs
         /// </summary>
@@ -38,8 +48,10 @@ namespace Arkanoid.PickUps
             abilityContainer = ab;
         }
 
-        // TODO: Use Genera; UpdateManager instead that Update 
-        private void Update() { state.Update();  }
+        private void OnUpdate()
+        {
+            state.Update();
+        }
 
         /** */
         private void OnTriggerEnter(Collider other)

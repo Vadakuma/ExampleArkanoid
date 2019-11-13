@@ -9,13 +9,13 @@ namespace Arkanoid.GameStates
     /** */
     public class PlayState : BaseGameState
     {
-        private WaitForSeconds waitbrforecheck = new WaitForSeconds(0.15f);
-        private bool active = false;
-        private SessionCondition loseCondition;
+        private WaitForSeconds      _waitbrforecheck = new WaitForSeconds(0.15f);
+        private bool                _active = false;
+        private SessionCondition    _loseCondition;
         // cach for win conditions checking
-        private GameObject projectileLink;
-        private int enemiesAmount;
-        private int platformHealh;
+        private GameObject          _projectileLink;
+        private int                 _enemiesAmount;
+        private int                 _platformHealh;
 
         public PlayState(IGameState prev) : base(prev)
         {
@@ -37,8 +37,8 @@ namespace Arkanoid.GameStates
                 return;
             }
 
-            loseCondition = GameState.gameData.GetLoseCondition;
-            active = true;
+            _loseCondition = GameState.gameData.GetLoseCondition;
+            _active = true;
             GameState.Instance.StartCoroutine(CheckConditions());
 
             SetActiveGameActors();
@@ -50,9 +50,9 @@ namespace Arkanoid.GameStates
         /// <returns></returns>
         private IEnumerator CheckConditions()
         {
-            while (active)
+            while (_active)
             {
-                yield return waitbrforecheck;
+                yield return _waitbrforecheck;
                 switch (CheckWinConditions())
                 {
                     case GameStatus.GS_LOSE:
@@ -77,21 +77,21 @@ namespace Arkanoid.GameStates
         {
             // update value
             if (Ball.Instance)
-                projectileLink = Ball.Instance.gameObject;
+                _projectileLink = Ball.Instance.gameObject;
             else
-                projectileLink = null;
-            enemiesAmount = EnemyManager.Instance.GetActiveEnemiesAmount();
-            platformHealh = Platform.Instance.GetPlatformSettings.Health;
+                _projectileLink = null;
+            _enemiesAmount = EnemyManager.Instance.GetActiveEnemiesAmount();
+            _platformHealh = Platform.Instance.GetPlatformSettings.Health;
 
             // SessionCondition from GameData
-            return loseCondition.CheckConditions(projectileLink, enemiesAmount, platformHealh);
+            return _loseCondition.CheckConditions(_projectileLink, _enemiesAmount, _platformHealh);
         }
 
         /** */
         public override void Disable()
         {
             base.Disable();
-            active = false; // deactivate Coroutine
+            _active = false; // deactivate Coroutine
         }
     }
 }

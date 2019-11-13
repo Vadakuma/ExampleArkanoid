@@ -33,13 +33,14 @@ namespace Arkanoid.GameStates
         private void OnEnable()
         {
             SceneManager.sceneLoaded += OnLevelFinishedLoading;
+            UpdateManager.SubscribeToUpdate(OnUpdate);
         }
         private void OnDisable()
         {
             SceneManager.sceneLoaded -= OnLevelFinishedLoading;
+            UpdateManager.UnSubscribeFromUpdate(OnUpdate);
         }
 
-        /** */
         private void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
         {
             if (scene.buildIndex != 0) // check that it is right Game level by index and generate scene stuff
@@ -50,8 +51,8 @@ namespace Arkanoid.GameStates
                 gameData.ResetAllSavedScoreData();
         }
 
-        // TODO: Update manager!!! 
-        private void Update()  {
+        private void OnUpdate()
+        {
             state.Update();
         }
 

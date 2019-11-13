@@ -44,8 +44,17 @@ namespace Arkanoid.PlayerPlatform
             GoToIdleState();
         }
 
-        //TODO: subscribe  to General UpdateManager instead using that!
-        private void Update()
+        private void OnEnable()
+        {
+            UpdateManager.SubscribeToUpdate(OnUpdate);
+        }
+
+        private void OnDisable()
+        {
+            UpdateManager.UnSubscribeFromUpdate(OnUpdate);
+        }
+
+        private void OnUpdate()
         {
             state.Update(this);
         }

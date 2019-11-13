@@ -1,6 +1,7 @@
 ﻿using Arkanoid.PlayerPlatform;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Arkanoid.PickUps
@@ -10,8 +11,8 @@ namespace Arkanoid.PickUps
     /// </summary>
     public class PickUpActiveState : PickUpState
     {
-        private float lifeTime;
-        private bool isPickUpLife = false;
+        private float _lifeTime;
+        private bool _isPickUpLife = false;
 
         public PickUpActiveState(Pickup pu)
         {
@@ -21,6 +22,7 @@ namespace Arkanoid.PickUps
             ActivateLifeTimer(); // this timer cheaper for GC
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void SetInitialPosition()
         {
             // set spawn position on the line with platform
@@ -30,22 +32,23 @@ namespace Arkanoid.PickUps
         }
 
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void ActivateLifeTimer()
         {
-            lifeTime = pus.LifeTime;
-            isPickUpLife = true;
+            _lifeTime = pus.LifeTime;
+            _isPickUpLife = true;
         }
 
 
         public override void Update()
         {
             // to do some stuff
-            if (isPickUpLife) // life time cicle
+            if (_isPickUpLife) // life time cicle
             {
-                lifeTime -= Time.deltaTime;
-                if (lifeTime < 0.0f) // when it is done go to PickUpDeactiveState
+                _lifeTime -= Time.deltaTime;
+                if (_lifeTime < 0.0f) // when it is done go to PickUpDeactiveState
                 {
-                    isPickUpLife = false;
+                    _isPickUpLife = false;
                     if (parent)
                         parent.DeActivateState();
                 }
