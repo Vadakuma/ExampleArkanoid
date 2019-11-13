@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Arkanoid.UI
 {
-    public abstract class BaseMenu : MonoBehaviour
+    public abstract class BaseMenuController : MonoBehaviour
     {
         public enum UICommands
         {
@@ -92,7 +92,7 @@ namespace Arkanoid.UI
             uICanvasContainer.Fade(0.0f, 0.1f, false);
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             RemoveListeners();
         }
